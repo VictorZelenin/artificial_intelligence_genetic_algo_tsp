@@ -18,6 +18,14 @@ public class Routes {
     }
 
 
+    // no used routeMatrix
+    public Routes(int quantityOfRoutes) {
+
+        generateRandomCities(quantityOfRoutes, this.cities);
+
+    }
+
+
     public double getWeight(Gene firstCity, Gene secondCity, RouteFunction weightFunction) {
         return weightFunction.getRouteWeightFunction(firstCity, secondCity);
     }
@@ -25,6 +33,15 @@ public class Routes {
 
     public int getQuantityOfRoutes() {
         return quantityOfRoutes;
+    }
+
+
+    private void generateRandomCities(int quantityOfRoutes, Gene[] cities) {
+
+        for (int i = 0; i < quantityOfRoutes; i++) {
+            cities[i] = new Gene(i + 1);
+        }
+
     }
 
 
