@@ -36,4 +36,14 @@ public final class Gene implements Serializable {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "City[" + id
+                + "] x = "
+                + x
+                + ", y = "
+                + y
+                + "\n";
+    }
 }
