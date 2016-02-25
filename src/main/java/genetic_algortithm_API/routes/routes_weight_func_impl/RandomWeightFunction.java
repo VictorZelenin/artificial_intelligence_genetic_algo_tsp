@@ -1,6 +1,6 @@
 package genetic_algortithm_API.routes.routes_weight_func_impl;
 
-import genetic_algortithm_API.elementary_parts.gene.Gene;
+import genetic_algortithm_API.elementary_parts.city.City;
 import genetic_algortithm_API.routes.RouteFunction;
 
 import static java.lang.Math.*;
@@ -11,7 +11,7 @@ import static java.lang.Math.*;
 public class RandomWeightFunction implements RouteFunction {
 
     @Override
-    public double getRouteWeightFunction(Gene firstCity, Gene secondCity) {
+    public  double getRouteWeightFunction(City firstCity, City secondCity) {
 
 
         return random() * sqrt(pow(firstCity.getX() - secondCity.getX(), 2) + pow(firstCity.getY() - secondCity.getY(), 2));

@@ -1,6 +1,6 @@
 package genetic_algortithm_API.routes;
 
-import genetic_algortithm_API.elementary_parts.gene.Gene;
+import genetic_algortithm_API.elementary_parts.city.City;
 
 /**
  * Created by User on 24.02.2016.
@@ -8,6 +8,6 @@ import genetic_algortithm_API.elementary_parts.gene.Gene;
 @FunctionalInterface
 public interface RouteFunction {
 
-    double getRouteWeightFunction(Gene firstCity, Gene secondCity);
+    double getRouteWeightFunction(City firstCity, City secondCity);
 
 }
