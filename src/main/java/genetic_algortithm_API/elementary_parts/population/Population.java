@@ -34,7 +34,7 @@ public class Population {
             for (int j = 0; j < routes.getCitiesID().length; j++) {
                 List<Integer> usedIDs = new ArrayList<>();
                 usedIDs.add(startID);
-                if ()
+//                if ()
 
 
             }
