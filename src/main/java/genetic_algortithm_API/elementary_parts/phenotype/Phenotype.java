@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 public class Phenotype implements Serializable {
 
-    private int[] phenotype;
+    private final int[] phenotype;
 //    private Routes routes;
 
     // нормувати єнумом , щоб збільшити точність
@@ -29,14 +29,16 @@ public class Phenotype implements Serializable {
 
     private void validate(int[] genes, Routes routes) throws Exception {
 
+        int[] genesCopy = genes.clone();
+
         if (genes.length != routes.getCitiesID().length) {
             throw new Exception();
         }
 
-        Arrays.sort(genes);
+        Arrays.sort(genesCopy);
         Arrays.sort(routes.getCitiesID());
 
-        if (!Arrays.equals(genes, routes.getCitiesID())) {
+        if (!Arrays.equals(genesCopy, routes.getCitiesID())) {
             throw new Exception();
         }
 
@@ -92,16 +94,16 @@ public class Phenotype implements Serializable {
     // test unit
     public static void main(String[] args) {
 
-        int[] genes = {2, 1, 3};
+        int[] genes = {1, 3, 4, 2};
         Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());
 
         Phenotype phenotype = new Phenotype(genes);
 
-        System.out.println(Arrays.toString(phenotype.getPhenotype()));
 
+//        System.out.println(phenotype.getFitnessValue(routes));
+
+        Routes.printMatrix(routes.getRoutesMatrix());
         System.out.println(phenotype.getFitnessValue(routes));
-
-
     }
 
 }

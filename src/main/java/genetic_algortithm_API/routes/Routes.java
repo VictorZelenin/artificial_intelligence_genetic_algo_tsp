@@ -2,7 +2,7 @@ package genetic_algortithm_API.routes;
 
 import genetic_algortithm_API.elementary_parts.city.City;
 import genetic_algortithm_API.routes.routes_weight_func_impl.CoordinatesWeightFunction;
-import genetic_algortithm_API.routes.routes_weight_func_impl.RandomWeightFunction;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
