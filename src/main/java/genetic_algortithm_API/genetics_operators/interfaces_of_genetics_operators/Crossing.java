@@ -9,6 +9,6 @@ import genetic_algortithm_API.elementary_parts.phenotype.Phenotype;
 @FunctionalInterface
 public interface Crossing {
 
-    Phenotype crossing(Phenotype mother, Phenotype father) throws Exception;
+    Phenotype[] crossover(Phenotype mother, Phenotype father) throws Exception;
 
 }
