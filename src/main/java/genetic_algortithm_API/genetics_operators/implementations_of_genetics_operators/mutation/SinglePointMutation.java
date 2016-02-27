@@ -8,21 +8,25 @@ import java.util.Arrays;
 /**
  * Created by User on 27.02.2016.
  */
+
+// it worked correct
 public class SinglePointMutation implements Mutation {
 
 
     @Override
     public void mutate(Phenotype individual) {
-        int firstRandomIndex = (int) (Math.random() * individual.getPhenotype().length);
+
+
+        int firstRandomIndex = (int) ((Math.random() * (individual.getPhenotype().length - 1) + 1));
         int secondRandomIndex;
 
         do {
-            secondRandomIndex = (int) (Math.random() * individual.getPhenotype().length);
+            secondRandomIndex = (int) ((Math.random() * (individual.getPhenotype().length - 1) + 1));
         }
         while (secondRandomIndex == firstRandomIndex);
 
-        System.out.println("first gene index: " + firstRandomIndex);
-        System.out.println("second gene index: " + secondRandomIndex);
+        System.out.println("first random index " + firstRandomIndex);
+        System.out.println("second random index " + secondRandomIndex);
 
         swap(individual, firstRandomIndex, secondRandomIndex);
 
@@ -40,7 +44,7 @@ public class SinglePointMutation implements Mutation {
     public static void main(String[] args) {
         SinglePointMutation mutation = new SinglePointMutation();
 
-        int[] genes = {1, 2, 3, 4};
+        int[] genes = {1, 2, 3, 4, 5, 6, 7, 8};
         System.out.println(Arrays.toString(genes));
         Phenotype phenotype = new Phenotype(genes);
 

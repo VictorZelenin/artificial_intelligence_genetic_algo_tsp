@@ -22,12 +22,7 @@ public class Routes {
     private City[] cities;
     private int quantityOfRoutes;
 
-//
-//    public Routes(double[][] routesMatrix) {
-//
-//        this.routesMatrix = routesMatrix;
-//        quantityOfRoutes = routesMatrix.length * routesMatrix[0].length;
-//    }
+
 
     public Routes(String fileName, RouteFunction routeFunction) {
 

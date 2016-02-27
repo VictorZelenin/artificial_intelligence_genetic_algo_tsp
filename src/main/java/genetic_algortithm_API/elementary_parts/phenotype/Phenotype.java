@@ -1,6 +1,7 @@
 package genetic_algortithm_API.elementary_parts.phenotype;
 
 import genetic_algortithm_API.elementary_parts.city.City;
+import genetic_algortithm_API.exceptions.InvalidGeneException;
 import genetic_algortithm_API.routes.Routes;
 import genetic_algortithm_API.routes.routes_weight_func_impl.CoordinatesWeightFunction;
 
@@ -27,19 +28,19 @@ public class Phenotype implements Serializable {
 
     }
 
-    private void validate(int[] genes, Routes routes) throws Exception {
+    private void validate(int[] genes, Routes routes) throws InvalidGeneException {
 
         int[] genesCopy = genes.clone();
 
         if (genes.length != routes.getCitiesID().length) {
-            throw new Exception();
+            throw new InvalidGeneException();
         }
 
         Arrays.sort(genesCopy);
         Arrays.sort(routes.getCitiesID());
 
         if (!Arrays.equals(genesCopy, routes.getCitiesID())) {
-            throw new Exception();
+            throw new InvalidGeneException();
         }
 
 
@@ -59,7 +60,7 @@ public class Phenotype implements Serializable {
         try {
             validate(this.phenotype, routes);
         } catch (Exception e) {
-            System.err.println("Invalid genes");
+            System.err.println("Current gene doesn't exist");
         }
 
         for (int i = 0; i < phenotype.length; i++) {
@@ -100,7 +101,6 @@ public class Phenotype implements Serializable {
         Phenotype phenotype = new Phenotype(genes);
 
 
-//        System.out.println(phenotype.getFitnessValue(routes));
 
         Routes.printMatrix(routes.getRoutesMatrix());
         System.out.println(phenotype.getFitnessValue(routes));

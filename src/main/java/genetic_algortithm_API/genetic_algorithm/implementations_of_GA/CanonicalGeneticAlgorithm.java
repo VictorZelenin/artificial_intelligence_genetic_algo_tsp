@@ -1,10 +1,9 @@
 package genetic_algortithm_API.genetic_algorithm.implementations_of_GA;
 
-import com.sun.org.apache.regexp.internal.RE;
 import genetic_algortithm_API.elementary_parts.phenotype.Phenotype;
 import genetic_algortithm_API.elementary_parts.population.Population;
 import genetic_algortithm_API.genetic_algorithm.interface_of_GA.GeneticAlgorithm;
-import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.SinglePointCrossing;
+import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.OrderedCrossing;
 import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.selection.ProportionalSelection;
 import genetic_algortithm_API.genetics_operators.interfaces_of_genetics_operators.Crossing;
 import genetic_algortithm_API.genetics_operators.interfaces_of_genetics_operators.Mutation;
@@ -32,23 +31,11 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
         this.startCityID = startCityID;
         this.mutationProbability = mutationProbability;
 
-        routes = new Routes("input.txt", new CoordinatesWeightFunction());
+        routes = new Routes(100, new CoordinatesWeightFunction());
         currentPopulation = new Population(sizeOfPopulation, routes, startCityID);
 
 //        checkElementOfPopulation(currentPopulation);
 
-    }
-
-    public double averageFitness() {
-
-
-        double fitnessValue = 0;
-
-        for (Phenotype phenotype : currentPopulation.getPopulation()) {
-            fitnessValue += phenotype.getFitnessValue(routes) / currentPopulation.getPopulation().size();
-        }
-
-        return fitnessValue;
     }
 
 
@@ -184,7 +171,7 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
         GA.checkElementOfPopulation(GA.currentPopulation);
 
-        GA.crossover(new SinglePointCrossing());
+        GA.crossover(new OrderedCrossing());
 
         GA.checkElementOfPopulation(GA.currentPopulation);
     }

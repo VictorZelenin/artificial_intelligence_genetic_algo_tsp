@@ -1,6 +1,7 @@
 package genetic_algortithm_API.elementary_parts.population;
 
 import genetic_algortithm_API.elementary_parts.phenotype.Phenotype;
+import genetic_algortithm_API.exceptions.InvalidGeneException;
 import genetic_algortithm_API.routes.Routes;
 import genetic_algortithm_API.routes.routes_weight_func_impl.CoordinatesWeightFunction;
 
@@ -16,14 +17,14 @@ public class Population implements Cloneable {
     private Set<Phenotype> population;
 
 
-    public Population(int sizeOfPopulation, Routes routes, int startID) throws Exception {
+    public Population(int sizeOfPopulation, Routes routes, int startID) throws InvalidGeneException {
 
         population = generateFirstPopulation(sizeOfPopulation, routes, startID);
 
     }
 
 
-    private Set<Phenotype> generateFirstPopulation(int size, Routes routes, int startID) throws Exception {
+    private Set<Phenotype> generateFirstPopulation(int size, Routes routes, int startID) throws InvalidGeneException {
 
         validate(routes, startID);
 
@@ -70,7 +71,7 @@ public class Population implements Cloneable {
         return firstPopulation;
     }
 
-    private void validate(Routes routes, int startID) throws Exception {
+    private void validate(Routes routes, int startID) throws InvalidGeneException {
 
         List<Integer> items = new ArrayList<>();
 
@@ -79,7 +80,7 @@ public class Population implements Cloneable {
         }
 
         if (!items.contains(startID)) {
-            throw new Exception();
+            throw new InvalidGeneException();
         }
 
 
