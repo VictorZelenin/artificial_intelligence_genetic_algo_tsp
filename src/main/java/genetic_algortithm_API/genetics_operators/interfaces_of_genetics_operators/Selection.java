@@ -1,6 +1,8 @@
 package genetic_algortithm_API.genetics_operators.interfaces_of_genetics_operators;
 
+import genetic_algortithm_API.elementary_parts.phenotype.Phenotype;
 import genetic_algortithm_API.elementary_parts.population.Population;
+import genetic_algortithm_API.routes.Routes;
 
 /**
  * Created by User on 26.02.2016.
@@ -9,6 +11,6 @@ import genetic_algortithm_API.elementary_parts.population.Population;
 @FunctionalInterface
 public interface Selection {
 
-    Population select(Population oldPopulation);
+    Phenotype select(Population currentPopulation, Routes routes);
 
 }

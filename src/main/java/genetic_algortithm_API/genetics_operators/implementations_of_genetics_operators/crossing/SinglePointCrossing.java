@@ -27,9 +27,10 @@ public class SinglePointCrossing implements Crossing {
         int[] daughterGenes = new int[father.getPhenotype().length];
 
 
-//        int crossingPoint = (int) (Math.random() * father.getPhenotype().length);
-        int crossingPoint = 1;
+        int crossingPoint = (int) (Math.random() * father.getPhenotype().length);
+//        int crossingPoint = 1;
 
+        System.out.println("Crossing Point: " + crossingPoint);
         ArrayList<Integer> geneMapping = new ArrayList<>();
 
 

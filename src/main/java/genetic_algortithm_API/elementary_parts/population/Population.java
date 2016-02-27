@@ -11,15 +11,12 @@ import java.util.*;
  * Created by User on 25.02.2016.
  */
 
-public class Population {
+public class Population implements Cloneable {
 
     private Set<Phenotype> population;
-    private Routes routes;
 
 
     public Population(int sizeOfPopulation, Routes routes, int startID) throws Exception {
-
-        this.routes = routes;
 
         population = generateFirstPopulation(sizeOfPopulation, routes, startID);
 
@@ -88,6 +85,10 @@ public class Population {
 
     }
 
+    public void setPopulation(Set<Phenotype> population) {
+        this.population = population;
+    }
+
     public Set<Phenotype> getPopulation() {
         return population;
     }
@@ -95,6 +96,11 @@ public class Population {
     @Override
     public String toString() {
         return "Population(phenotypes[])" + population;
+    }
+
+    @Override
+    public Population clone() throws CloneNotSupportedException {
+        return (Population) super.clone();
     }
 
 
