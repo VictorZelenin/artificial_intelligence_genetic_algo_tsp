@@ -22,26 +22,27 @@ public class ProportionalSelection implements Selection {
         Phenotype phenotype;
 
         double averageFitnessValue = averageFitness(currentPopulation, routes);
+//        System.out.println(averageFitnessValue);
 
         for (Phenotype individual : currentPopulation.getPopulation()) {
 
-            double fitnessValue = individual.getFitnessValue(routes) / averageFitnessValue;
-            double fitnessValueIntegerPart = Math.floor(individual.getFitnessValue(routes) / averageFitnessValue);
+            double fitnessValue = averageFitnessValue / individual.getFitnessValue(routes);
+            double fitnessValueIntegerPart = Math.floor(averageFitnessValue / individual.getFitnessValue(routes)) + 1;
             double probabilityValue = Math.random();
             double fitnessValueDivPart = fitnessValue - fitnessValueIntegerPart;
 
             if (fitnessValueDivPart >= probabilityValue) {
                 fitnessValueIntegerPart++;
             }
-
+//            System.out.println(fitnessValue);
 
             probabilityMap.put(individual, fitnessValueIntegerPart);
 
 
         }
+//        System.out.println(probabilityMap);
 
         phenotype = choosePhenotype(probabilityMap);
-
 
 
         return phenotype;
@@ -59,7 +60,8 @@ public class ProportionalSelection implements Selection {
         }
 
         int randomIndex = (int) (Math.random() * roulette.size());
-
+//        System.out.println(roulette.size());
+//        System.out.println(randomIndex);
 
         return roulette.get(randomIndex);
     }
@@ -84,7 +86,15 @@ public class ProportionalSelection implements Selection {
         ProportionalSelection selection = new ProportionalSelection();
         Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());
         Population population = new Population(5, routes, 1);
-        selection.select(population, routes);
+//        System.out.println(population);
+        for (Phenotype phenotype : population.getPopulation()) {
+            System.out.print(phenotype);
+            System.out.println(" " + phenotype.getFitnessValue(routes));
+        }
+
+        Phenotype selectedPhenotype = selection.select(population, routes);
+
+        System.out.println("Selected phenotype: " + selectedPhenotype + " " + selectedPhenotype.getFitnessValue(routes));
 
 
     }

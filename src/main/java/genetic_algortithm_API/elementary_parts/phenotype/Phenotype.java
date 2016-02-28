@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class Phenotype implements Serializable {
 
     private final int[] phenotype;
-//    private Routes routes;
+
 
     // нормувати єнумом , щоб збільшити точність
     private boolean status;
@@ -25,6 +25,7 @@ public class Phenotype implements Serializable {
     // initialize in different order
     public Phenotype(int[] phenotype) {
         this.phenotype = phenotype;
+
 
     }
 
@@ -101,9 +102,9 @@ public class Phenotype implements Serializable {
         Phenotype phenotype = new Phenotype(genes);
 
 
-
-        Routes.printMatrix(routes.getRoutesMatrix());
+//        Routes.printMatrix(routes.getRoutesMatrix());
         System.out.println(phenotype.getFitnessValue(routes));
     }
+
 
 }

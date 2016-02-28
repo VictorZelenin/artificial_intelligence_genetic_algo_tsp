@@ -25,8 +25,8 @@ public class SinglePointMutation implements Mutation {
         }
         while (secondRandomIndex == firstRandomIndex);
 
-        System.out.println("first random index " + firstRandomIndex);
-        System.out.println("second random index " + secondRandomIndex);
+//        System.out.println("first random index " + firstRandomIndex);
+//        System.out.println("second random index " + secondRandomIndex);
 
         swap(individual, firstRandomIndex, secondRandomIndex);
 

@@ -140,7 +140,8 @@ public class Routes {
         return routesMatrix;
     }
 
-    public static void printMatrix(double[][] routesMatrix) {
+
+    public  void printMatrix() {
 
         for (int i = 0; i < routesMatrix.length; i++) {
             for (int j = 0; j < routesMatrix[i].length; j++) {
@@ -159,7 +160,7 @@ public class Routes {
         Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());
         System.out.println(Arrays.toString(routes.getCities()));
         System.out.println(Arrays.toString(routes.getCitiesID()));
-        printMatrix(routes.getRoutesMatrix());
+//        printMatrix(routes.getRoutesMatrix());
 //        printMatrix(routes.routesMatrix);
 
 
