@@ -33,8 +33,8 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
         ArrayList<Phenotype> phenotypes = new ArrayList<>();
 
-        routes = new Routes(4, new CoordinatesWeightFunction());
-        routes.printMatrix();
+        routes = new Routes(100, new CoordinatesWeightFunction());
+//        routes.printMatrix();
         currentPopulation = new Population(sizeOfPopulation, routes, startCityID);
 
 //
@@ -46,13 +46,14 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
             mutate(new SinglePointMutation(), mutationProbability);
 
             currentPopulation.getPopulation().add(getStrongestPhenotype());
-            checkElementOfPopulation(currentPopulation);
+
+//            checkElementOfPopulation(currentPopulation);
 
             phenotypes.add(getStrongestPhenotype());
         }
 
 
-        Collections.sort(phenotypes, (o1, o2) -> (o1.getFitnessValue(routes) < o2.getFitnessValue(routes)) ? -1 : 1);
+        Collections.sort(phenotypes, (o1, o2) -> (Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes))));
 
 //        System.out.println(currentPopulation);
         System.out.println(phenotypes.get(0));
@@ -87,7 +88,7 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
                 .stream()
                 .collect(Collectors.toList());
 
-        Collections.sort(phenotypes, (o1, o2) -> (o1.getFitnessValue(routes) < o2.getFitnessValue(routes)) ? -100 : 1);
+        Collections.sort(phenotypes, (o1, o2) -> (Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes))));
 
         strongestIndividual = phenotypes.get(0);
 
@@ -195,7 +196,7 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
         // 1 - startCity , 2 - sizeOfPopulation, 3 - mutationProb , 4 - iterations
 
-        new CanonicalGeneticAlgorithm(1, 5, 0.05, 90);
+        new CanonicalGeneticAlgorithm(1, 5, 0, 5000);
 
 //        System.out.println(Arrays.toString(GA.select(new ProportionalSelection())));
 
