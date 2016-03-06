@@ -11,9 +11,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
 //        System.out.println(Math.random());
 
-        Scanner scanner = new Scanner(new File("input.txt"));
 
-        System.out.println(scanner.next());
 
     }
 }

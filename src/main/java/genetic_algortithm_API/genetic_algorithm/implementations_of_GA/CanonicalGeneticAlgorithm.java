@@ -33,7 +33,7 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
         ArrayList<Phenotype> phenotypes = new ArrayList<>();
 
-        routes = new Routes(100, new CoordinatesWeightFunction());
+        routes = new Routes("input.txt", new CoordinatesWeightFunction());
 //        routes.printMatrix();
         currentPopulation = new Population(sizeOfPopulation, routes, startCityID);
 
@@ -196,7 +196,7 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
         // 1 - startCity , 2 - sizeOfPopulation, 3 - mutationProb , 4 - iterations
 
-        new CanonicalGeneticAlgorithm(1, 5, 0, 5000);
+        new CanonicalGeneticAlgorithm(1, 50, 0.25, 1000);
 
 //        System.out.println(Arrays.toString(GA.select(new ProportionalSelection())));
 

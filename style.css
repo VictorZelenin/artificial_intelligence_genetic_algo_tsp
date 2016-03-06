@@ -1,0 +1,22 @@
+
+.root {
+    -fx-background-color: aliceblue;
+}
+
+.label {
+
+    -fx-padding: 30 0 0 230;
+    /*-fx-font-style: italic;*/
+    -fx-font: 18 dpi;
+
+}
+
+.button {
+
+    -fx-background-radius: 5;
+    -fx-pref-width: 70;
+    -fx-pref-height: 35;
+}
+
+
+

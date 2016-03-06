@@ -23,12 +23,20 @@ public class Routes {
     private int quantityOfRoutes;
 
 
-
     public Routes(String fileName, RouteFunction routeFunction) {
 
         cities = generateCitiesFromFile(fileName);
 
         routesMatrix = generateRoutesMatrix(cities, routeFunction);
+
+    }
+
+    public Routes(City[] cities, RouteFunction routeFunction) {
+        this.cities = cities;
+
+        routesMatrix = generateRoutesMatrix(cities, routeFunction);
+
+        getCitiesID(cities);
 
     }
 
@@ -132,6 +140,17 @@ public class Routes {
     }
 
 
+    private void getCitiesID(City[] cities) {
+
+        citiesID = new int[cities.length];
+        int i = 0;
+        for (City city : cities) {
+            citiesID[i] = city.getId();
+            i++;
+        }
+
+    }
+
     public int[] getCitiesID() {
         return citiesID;
     }
@@ -141,7 +160,7 @@ public class Routes {
     }
 
 
-    public  void printMatrix() {
+    public void printMatrix() {
 
         for (int i = 0; i < routesMatrix.length; i++) {
             for (int j = 0; j < routesMatrix[i].length; j++) {
@@ -156,13 +175,20 @@ public class Routes {
     // testing unit
     public static void main(String[] args) {
 //        Routes routes = new Routes(5, new CoordinatesWeightFunction());
+        City[] cities = new City[5];
+        cities[0] = new City(1, 1, 1);
+        cities[1] = new City(2, 2, 2);
+        cities[2] = new City(4, 3, 3);
+        cities[3] = new City(1, 6, 4);
+        cities[4] = new City(2, 8, 5);
 
-        Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());
+        Routes routes = new Routes(cities, new CoordinatesWeightFunction());
+//        Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());
         System.out.println(Arrays.toString(routes.getCities()));
         System.out.println(Arrays.toString(routes.getCitiesID()));
 //        printMatrix(routes.getRoutesMatrix());
 //        printMatrix(routes.routesMatrix);
-
+        routes.printMatrix();
 
     }
 

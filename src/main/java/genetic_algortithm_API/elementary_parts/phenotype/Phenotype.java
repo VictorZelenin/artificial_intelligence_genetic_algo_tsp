@@ -1,13 +1,11 @@
 package genetic_algortithm_API.elementary_parts.phenotype;
 
-import genetic_algortithm_API.elementary_parts.city.City;
+
 import genetic_algortithm_API.exceptions.InvalidGeneException;
 import genetic_algortithm_API.routes.Routes;
 import genetic_algortithm_API.routes.routes_weight_func_impl.CoordinatesWeightFunction;
 
-import java.io.File;
 import java.io.Serializable;
-import java.io.UncheckedIOException;
 import java.util.Arrays;
 
 /**

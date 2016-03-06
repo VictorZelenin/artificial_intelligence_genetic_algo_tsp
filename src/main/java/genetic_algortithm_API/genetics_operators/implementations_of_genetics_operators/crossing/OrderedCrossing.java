@@ -127,6 +127,7 @@ public class OrderedCrossing implements Crossing {
 
         int[] motherGenes = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
         int[] fatherGenes = {1, 12, 5, 3, 11, 7, 6, 8, 10, 9, 2, 4};
+
         Phenotype mother = new Phenotype(motherGenes);
         Phenotype father = new Phenotype(fatherGenes);
 
