@@ -1,5 +1,6 @@
 package genetic_algortithm_API.genetic_algorithm.implementations_of_GA;
 
+import genetic_algortithm_API.elementary_parts.city.City;
 import genetic_algortithm_API.elementary_parts.phenotype.Phenotype;
 import genetic_algortithm_API.elementary_parts.population.Population;
 import genetic_algortithm_API.exceptions.IllegalLengthOfPhenotypeException;
@@ -26,14 +27,15 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
     private Population currentPopulation;
     private Routes routes;
+    private Phenotype result;
 
 
     public CanonicalGeneticAlgorithm(int startCityID, int sizeOfPopulation, double mutationProbability,
                                      int maxNumberOfIterations) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
 
         ArrayList<Phenotype> phenotypes = new ArrayList<>();
-
-        routes = new Routes("input.txt", new CoordinatesWeightFunction());
+//        this.routes = routes;
+//        routes = new Routes("input.txt", new CoordinatesWeightFunction());
 //        routes.printMatrix();
         currentPopulation = new Population(sizeOfPopulation, routes, startCityID);
 
@@ -63,6 +65,35 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
     }
 
+    public CanonicalGeneticAlgorithm(int startCityID, int sizeOfPopulation, double mutationProbability,
+                                     int maxNumberOfIterations, City[] cities) throws Exception {
+        ArrayList<Phenotype> phenotypes = new ArrayList<>();
+        routes = new Routes(cities, new CoordinatesWeightFunction());
+        currentPopulation = new Population(sizeOfPopulation, routes, startCityID);
+
+        for (int i = 0; i < maxNumberOfIterations; i++) {
+
+
+            crossover(new OrderedCrossing());
+
+            mutate(new SinglePointMutation(), mutationProbability);
+
+            currentPopulation.getPopulation().add(getStrongestPhenotype());
+
+//            checkElementOfPopulation(currentPopulation);
+
+            phenotypes.add(getStrongestPhenotype());
+        }
+
+
+        Collections.sort(phenotypes, (o1, o2) -> (Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes))));
+
+//        System.out.println(currentPopulation);
+        System.out.println(phenotypes.get(0));
+        System.out.println(phenotypes.get(0).getFitnessValue(routes));
+        result = phenotypes.get(0);
+
+    }
 
     @Override
     public void checkElementOfPopulation(Population currentPopulation) {
@@ -189,6 +220,10 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
                 .forEach(mutation::mutate);
 
 
+    }
+
+    public Phenotype getResult(){
+        return result;
     }
 
     public static void main(String[] args) throws Exception {

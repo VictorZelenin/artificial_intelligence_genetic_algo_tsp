@@ -1,6 +1,8 @@
 package GUI;
 
 import genetic_algortithm_API.elementary_parts.city.City;
+import genetic_algortithm_API.genetic_algorithm.implementations_of_GA.CanonicalGeneticAlgorithm;
+import genetic_algortithm_API.genetic_algorithm.interface_of_GA.GeneticAlgorithm;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -41,7 +43,10 @@ public class View extends Application {
     private GraphicsContext graphicsContext;
     private City[] generatedCities;
 
-    private int quantityOfCities;
+    private Button startButton, nextButton;
+
+    private int quantityOfCities, sizeOfPopulation, iterations;
+    private double probability;
 
     private TextField numberOfCities, numberOfPopulation, numberOfIterations, mutationProbability;
 //    private Label citiesLabel, populationLabel, iterationsLabel, mutationProbLabel;
@@ -58,7 +63,7 @@ public class View extends Application {
         window = primaryStage;
 
 
-        Button nextButton = new Button("Далі");
+        nextButton = new Button("Далі");
         Button exitButton = new Button("Вихід");
         Label label = new Label("Введіть параметри алгоритму :");
 
@@ -67,9 +72,20 @@ public class View extends Application {
         exitButton.setOnAction(e -> Platform.exit());
         nextButton.setOnAction(e -> {
             primaryStage.setScene(mainScene);
-            quantityOfCities = Integer.parseInt(numberOfCities.getText());
+//            quantityOfCities = Integer.parseInt(numberOfCities.getText());
+//            probability = Double.parseDouble(mutationProbability.getText());
+//            iterations = Integer.parseInt(numberOfIterations.getText());
+//            sizeOfPopulation = Integer.parseInt(numberOfPopulation.getText());
 
             setupRandomCities();
+//            CanonicalGeneticAlgorithm ga = null;
+//            try {
+//                ga = new CanonicalGeneticAlgorithm(1, getSizeOfPopulation(), getProbability(),
+//                        getIterations(), getCities());
+//            } catch (Exception e1) {
+//                e1.printStackTrace();
+//            }
+//            drawRelationsBetweenCities(ga);
 
             System.out.println(quantityOfCities);
 
@@ -109,7 +125,7 @@ public class View extends Application {
 
     }
 
-    private City[] setupRandomCities() {
+    private void setupRandomCities() {
 
         generatedCities = new City[quantityOfCities];
 
@@ -117,7 +133,7 @@ public class View extends Application {
             double x = Math.random() * 940;
             double y = Math.random() * 480;
 
-            new City(x, y, i + 1);
+            generatedCities[i] = new City(x, y, i + 1);
 
             graphicsContext.beginPath();
             graphicsContext.fillOval(x, y, 6, 6);
@@ -126,7 +142,7 @@ public class View extends Application {
 
         }
 
-        return generatedCities;
+
     }
 
 
@@ -170,7 +186,7 @@ public class View extends Application {
     private void setupMainScene() {
 
         Button exitButton = new Button("Вихід");
-        Button startButton = new Button("Старт");
+        startButton = new Button("Старт");
 
         List<double[]> citiesCoordinates = new ArrayList<>();
 
@@ -251,6 +267,31 @@ public class View extends Application {
 
     }
 
+//    private void drawRelationsBetweenCities(CanonicalGeneticAlgorithm ga) {
+//
+//        int[] answer = ga.getResult().getPhenotype();
+//
+//        startButton.setOnAction(event -> {
+//            for (int i = 0; i < answer.length; i++) {
+//
+//                if (i == answer.length - 1) {
+//                    graphicsContext.beginPath();
+////                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
+//                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
+//                    graphicsContext.lineTo(generatedCities[answer[0] - 1].getX(), generatedCities[answer[0] - 1].getY());
+//                    graphicsContext.stroke();
+//                } else {
+//                    graphicsContext.beginPath();
+//                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
+//                    graphicsContext.lineTo(generatedCities[answer[i + 1] - 1].getX(), generatedCities[answer[i + 1] - 1].getY());
+//                    graphicsContext.stroke();
+//                }
+//
+//            }
+//        });
+//
+//    }
+
 
     public City[] getCities() {
         return generatedCities;
@@ -270,5 +311,33 @@ public class View extends Application {
 
     public double getMutationProbability() {
         return Double.parseDouble(mutationProbability.getText());
+    }
+
+    public Button getStartButton() {
+        return startButton;
+    }
+
+    public Button getNextButton() {
+        return nextButton;
+    }
+
+    public Scene getMainScene() {
+        return mainScene;
+    }
+
+    public Stage getWindow() {
+        return window;
+    }
+
+    public int getSizeOfPopulation() {
+        return sizeOfPopulation;
+    }
+
+    public int getIterations() {
+        return iterations;
+    }
+
+    public double getProbability() {
+        return probability;
     }
 }
