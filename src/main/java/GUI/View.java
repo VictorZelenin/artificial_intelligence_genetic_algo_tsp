@@ -15,9 +15,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.*;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
@@ -48,6 +46,12 @@ public class View extends Application {
     private int quantityOfCities, sizeOfPopulation, iterations;
     private double probability;
 
+    private String selectionType, crossingType, mutationType, typeOfGeneratingCities;
+
+    private ComboBox<String> typeOfSelection, typeOfCrossing, typeOfMutation;
+    private ToggleGroup toggleGroup;
+    private RadioButton initRandomCities, initCities;
+
     private TextField numberOfCities, numberOfPopulation, numberOfIterations, mutationProbability;
 //    private Label citiesLabel, populationLabel, iterationsLabel, mutationProbLabel;
 
@@ -71,13 +75,35 @@ public class View extends Application {
 
         exitButton.setOnAction(e -> Platform.exit());
         nextButton.setOnAction(e -> {
-            primaryStage.setScene(mainScene);
-//            quantityOfCities = Integer.parseInt(numberOfCities.getText());
-//            probability = Double.parseDouble(mutationProbability.getText());
-//            iterations = Integer.parseInt(numberOfIterations.getText());
-//            sizeOfPopulation = Integer.parseInt(numberOfPopulation.getText());
 
-            setupRandomCities();
+            try {
+                quantityOfCities = Integer.parseInt(numberOfCities.getText());
+                probability = Double.parseDouble(mutationProbability.getText());
+                iterations = Integer.parseInt(numberOfIterations.getText());
+                sizeOfPopulation = Integer.parseInt(numberOfPopulation.getText());
+
+                if (selectionType == null || crossingType == null || mutationType == null || typeOfGeneratingCities == null) {
+                    throw new Exception();
+                }
+
+                if (typeOfGeneratingCities.equals("Random")) {
+                    setupRandomCities();
+                } else {
+//                    primaryStage.setScene(mainScene);
+                    drawCities(canvas, graphicsContext);
+                }
+
+                primaryStage.setScene(mainScene);
+            } catch (Exception exception) {
+                Alert initAlert = new Alert(Alert.AlertType.WARNING);
+                initAlert.setTitle("Попередження");
+                initAlert.setHeaderText("Погані вхідні параметри! ");
+                initAlert.setContentText("Перевірте введені дані.");
+
+                initAlert.showAndWait();
+            }
+//
+//            setupRandomCities();
 //            CanonicalGeneticAlgorithm ga = null;
 //            try {
 //                ga = new CanonicalGeneticAlgorithm(1, getSizeOfPopulation(), getProbability(),
@@ -87,7 +113,16 @@ public class View extends Application {
 //            }
 //            drawRelationsBetweenCities(ga);
 
+
             System.out.println(quantityOfCities);
+            System.out.println(probability);
+            System.out.println(iterations);
+            System.out.println(sizeOfPopulation);
+            System.out.println(selectionType);
+            System.out.println(crossingType);
+            System.out.println(mutationType);
+            System.out.println(typeOfGeneratingCities);
+
 
         });
 
@@ -96,6 +131,7 @@ public class View extends Application {
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.BASELINE_CENTER);
+        grid.setPadding(new Insets(20));
         grid.setVgap(20);
 
         HBox buttonsPane = new HBox();
@@ -108,9 +144,12 @@ public class View extends Application {
         initSceneRoot.setBottom(buttonsPane);
 
         initTextFields();
+        initComboboxes();
+        initRadioButtons();
 
 
-        grid.getChildren().addAll(numberOfCities, numberOfPopulation, numberOfIterations, mutationProbability);
+        grid.getChildren().addAll(numberOfCities, numberOfPopulation, numberOfIterations, mutationProbability,
+                typeOfSelection, typeOfCrossing, typeOfMutation, initRandomCities, initCities);
 
 
         initScene = new Scene(initSceneRoot, 700, 550);
@@ -133,7 +172,7 @@ public class View extends Application {
             double x = Math.random() * 940;
             double y = Math.random() * 480;
 
-            generatedCities[i] = new City(x, y, i + 1);
+            generatedCities[i] = new City(x + 3, y + 3, i + 1);
 
             graphicsContext.beginPath();
             graphicsContext.fillOval(x, y, 6, 6);
@@ -176,6 +215,52 @@ public class View extends Application {
 
     }
 
+    private void initComboboxes() {
+
+        typeOfSelection = new ComboBox<>();
+        typeOfSelection.setPromptText("Оберіть оператор відбору.");
+        typeOfSelection.getItems().addAll("Пропорційний відбір.");
+        GridPane.setConstraints(typeOfSelection, 0, 4);
+
+        typeOfSelection.setOnAction(e -> selectionType = typeOfSelection.getValue());
+
+        typeOfCrossing = new ComboBox<>();
+        typeOfCrossing.setPromptText("Оберіть оператор селекції.");
+        typeOfCrossing.getItems().addAll("2-х точковий кросовер.");
+        GridPane.setConstraints(typeOfCrossing, 0, 5);
+
+        typeOfCrossing.setOnAction(e -> crossingType = typeOfCrossing.getValue());
+
+        typeOfMutation = new ComboBox<>();
+        typeOfMutation.setPromptText("Оберіть оператор мутації.");
+        typeOfMutation.getItems().addAll("Одноточкова мутація.");
+        GridPane.setConstraints(typeOfMutation, 0, 6);
+
+        typeOfMutation.setOnAction(e -> mutationType = typeOfMutation.getValue());
+
+
+    }
+
+    private void initRadioButtons() {
+        toggleGroup = new ToggleGroup();
+
+        initRandomCities = new RadioButton("Розмістити міста випадковим чином.");
+        initRandomCities.setUserData("Random");
+
+        initCities = new RadioButton("Самостійно розмістити міста.");
+        initCities.setUserData("Custom");
+
+        initRandomCities.setToggleGroup(toggleGroup);
+        initCities.setToggleGroup(toggleGroup);
+
+        GridPane.setConstraints(initRandomCities, 0, 7);
+        GridPane.setConstraints(initCities, 0, 8);
+
+        toggleGroup.selectedToggleProperty().addListener(e -> {
+            typeOfGeneratingCities = (String) toggleGroup.getSelectedToggle().getUserData();
+        });
+    }
+
 
     private void loadCSSFile(String fileName) throws MalformedURLException {
         File file = new File(fileName);
@@ -194,8 +279,8 @@ public class View extends Application {
         graphicsContext = canvas.getGraphicsContext2D();
         initDraw(graphicsContext);
 
-        drawCities(canvas, graphicsContext, citiesCoordinates);
-        drawRelationsBetweenCities(startButton, graphicsContext, citiesCoordinates);
+//        drawCities(canvas, graphicsContext, citiesCoordinates);
+//        drawRelationsBetweenCities(startButton, graphicsContext, citiesCoordinates);
 
 
         exitButton.setPrefSize(70, 35);
@@ -242,17 +327,37 @@ public class View extends Application {
 
     }
 
-    private void drawCities(Canvas canvas, GraphicsContext graphicsContext, List<double[]> citiesCoordinates) {
+    static int counter = 0;
+
+    private void drawCities(Canvas canvas, GraphicsContext graphicsContext) {
+
+        generatedCities = new City[quantityOfCities];
+
 
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
                 event -> {
-                    graphicsContext.beginPath();
-                    graphicsContext.fillOval(event.getX(), event.getY(), 8, 8);
-                    citiesCoordinates.add(new double[]{event.getX() + 4, event.getY() + 4});
-                    graphicsContext.stroke();
+                    if (counter == quantityOfCities) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Помилка");
+                        alert.setHeaderText("Забагато міст.");
+                        alert.setContentText("Всі міста вже сформовані, тисність старт!");
+
+                        alert.showAndWait();
+
+                    } else {
+                        graphicsContext.beginPath();
+                        graphicsContext.fillOval(event.getX(), event.getY(), 6, 6);
+                        graphicsContext.fillText(String.valueOf(counter + 1), event.getX(), event.getY());
+                        generatedCities[counter] = new City(event.getX() + 3, event.getY() + 3, counter + 1);
+                        counter++;
+                        graphicsContext.stroke();
+
+                    }
                 });
 
+
     }
+
 
     private void drawRelationsBetweenCities(Button startButton, GraphicsContext graphicsContext, List<double[]> cities) {
         startButton.setOnAction(event -> {
@@ -267,30 +372,30 @@ public class View extends Application {
 
     }
 
-//    private void drawRelationsBetweenCities(CanonicalGeneticAlgorithm ga) {
-//
-//        int[] answer = ga.getResult().getPhenotype();
-//
-//        startButton.setOnAction(event -> {
-//            for (int i = 0; i < answer.length; i++) {
-//
-//                if (i == answer.length - 1) {
-//                    graphicsContext.beginPath();
-////                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
+    private void drawRelationsBetweenCities(CanonicalGeneticAlgorithm ga) {
+
+        int[] answer = ga.getResult().getPhenotype();
+
+        startButton.setOnAction(event -> {
+            for (int i = 0; i < answer.length; i++) {
+
+                if (i == answer.length - 1) {
+                    graphicsContext.beginPath();
 //                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
-//                    graphicsContext.lineTo(generatedCities[answer[0] - 1].getX(), generatedCities[answer[0] - 1].getY());
-//                    graphicsContext.stroke();
-//                } else {
-//                    graphicsContext.beginPath();
-//                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
-//                    graphicsContext.lineTo(generatedCities[answer[i + 1] - 1].getX(), generatedCities[answer[i + 1] - 1].getY());
-//                    graphicsContext.stroke();
-//                }
-//
-//            }
-//        });
-//
-//    }
+                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
+                    graphicsContext.lineTo(generatedCities[answer[0] - 1].getX(), generatedCities[answer[0] - 1].getY());
+                    graphicsContext.stroke();
+                } else {
+                    graphicsContext.beginPath();
+                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
+                    graphicsContext.lineTo(generatedCities[answer[i + 1] - 1].getX(), generatedCities[answer[i + 1] - 1].getY());
+                    graphicsContext.stroke();
+                }
+
+            }
+        });
+
+    }
 
 
     public City[] getCities() {
@@ -340,4 +445,17 @@ public class View extends Application {
     public double getProbability() {
         return probability;
     }
+
+    public String getSelectionType() {
+        return selectionType;
+    }
+
+    public String getCrossingType() {
+        return crossingType;
+    }
+
+    public String getMutationType() {
+        return mutationType;
+    }
 }
+
