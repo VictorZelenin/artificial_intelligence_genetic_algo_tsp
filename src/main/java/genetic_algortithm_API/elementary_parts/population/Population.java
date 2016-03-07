@@ -14,77 +14,51 @@ import java.util.*;
 
 public class Population implements Cloneable {
 
+    // нету одинаковых особей в популяции
     private Set<Phenotype> population;
 
 
-    public Population(int sizeOfPopulation, Routes routes, int startID) throws InvalidGeneException {
+    public Population(int sizeOfPopulation, Routes routes) {
 
-        population = generateFirstPopulation(sizeOfPopulation, routes, startID);
+        population = generateFirstPopulation(sizeOfPopulation, routes);
 
     }
 
 
-    private Set<Phenotype> generateFirstPopulation(int size, Routes routes, int startID) throws InvalidGeneException {
-
-        validate(routes, startID);
+    private Set<Phenotype> generateFirstPopulation(int size, Routes routes) {
 
         int[] possibleGenes = routes.getCitiesID();
+        Set<Phenotype> firstPopulation = new HashSet<>(size);
 
-        Set<Phenotype> firstPopulation = new HashSet<>();
+        for (int j = 0; j < size; j++) {
 
-
-        for (int i = 0; i < size; i++) {
-            int[] genes = new int[possibleGenes.length];
-            Phenotype phenotype;
-
-            int j = 0;
-            List<Integer> usedGenes = new ArrayList<>();
-            while (j != possibleGenes.length) {
-
-
-                int gene;
-                int randomIndex = (int) (Math.random() * possibleGenes.length);
-
-                if (j == 0) {
-                    gene = startID;
-
-                } else {
-                    gene = possibleGenes[randomIndex];
-                }
-
-                if (!usedGenes.contains(gene)) {
-                    genes[j] = gene;
-                    usedGenes.add(gene);
-                    j++;
-
-                }
-
-
-            }
-
-            phenotype = new Phenotype(genes);
-            firstPopulation.add(phenotype);
+            firstPopulation.add(new Phenotype(shuffleArray(possibleGenes)));
 
         }
 
+
+//        System.out.println(firstPopulation);
 
         return firstPopulation;
     }
 
-    private void validate(Routes routes, int startID) throws InvalidGeneException {
+    private int[] shuffleArray(int[] array) {
 
-        List<Integer> items = new ArrayList<>();
 
-        for (int i = 0; i < routes.getCitiesID().length; i++) {
-            items.add(routes.getCitiesID()[i]);
+        int index;
+        Random random = new Random();
+        for (int i = array.length - 1; i > 0; i--) {
+            index = random.nextInt(i + 1);
+            if (index != i) {
+                array[index] ^= array[i];
+                array[i] ^= array[index];
+                array[index] ^= array[i];
+            }
         }
 
-        if (!items.contains(startID)) {
-            throw new InvalidGeneException();
-        }
-
-
+        return Arrays.copyOfRange(array, 0, array.length);
     }
+
 
     public void setPopulation(Set<Phenotype> population) {
         this.population = population;
@@ -99,27 +73,20 @@ public class Population implements Cloneable {
         return "Population(phenotypes[])" + population;
     }
 
-    @Override
-    public Population clone() throws CloneNotSupportedException {
-        return (Population) super.clone();
-    }
-
 
     // testing unit
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidGeneException {
 
         Population firstPopulation = null;
-        Routes routes = new Routes(4, new CoordinatesWeightFunction());
+        Routes routes = new Routes(100, new CoordinatesWeightFunction());
 
-        try {
-            firstPopulation = new Population(4, routes, 1);
-        } catch (Exception e) {
-            System.err.println("Invalid start city");
-        }
 
-        for (Phenotype phenotype : firstPopulation.population) {
-            System.out.println(phenotype + " " + phenotype.getFitnessValue(routes));
-        }
+        firstPopulation = new Population(3, routes);
+
+
+//        for (Phenotype phenotype : firstPopulation.population) {
+//            System.out.println(phenotype + " " + phenotype.getFitnessValue(routes));
+//        }
 
     }
 

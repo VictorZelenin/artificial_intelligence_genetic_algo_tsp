@@ -4,21 +4,17 @@ import genetic_algortithm_API.elementary_parts.phenotype.Phenotype;
 import genetic_algortithm_API.exceptions.IllegalLengthOfPhenotypeException;
 import genetic_algortithm_API.genetics_operators.interfaces_of_genetics_operators.Crossing;
 
-import java.sql.Array;
 import java.util.*;
 
 /**
  * Created by User on 26.02.2016.
  */
 
-public class OrderedCrossing implements Crossing {
+public class TwoPointsCrossing implements Crossing {
 
 
     @Override
     public Phenotype[] crossover(Phenotype mother, Phenotype father) throws IllegalLengthOfPhenotypeException {
-
-        Phenotype newMother = new Phenotype(Arrays.copyOfRange(mother.getPhenotype(), 1, mother.getPhenotype().length));
-        Phenotype newFather = new Phenotype(Arrays.copyOfRange(father.getPhenotype(), 1, father.getPhenotype().length));
 
 
         int phenotypeLength;
@@ -26,7 +22,7 @@ public class OrderedCrossing implements Crossing {
         if (mother.getPhenotype().length != father.getPhenotype().length) {
             throw new IllegalLengthOfPhenotypeException();
         } else {
-            phenotypeLength = father.getPhenotype().length - 1;
+            phenotypeLength = father.getPhenotype().length;
         }
 
         Phenotype[] successors = new Phenotype[2];
@@ -66,8 +62,8 @@ public class OrderedCrossing implements Crossing {
 
             }
 
-            fatherGenes.add(newFather.getPhenotype()[index]);
-            motherGenes.add(newMother.getPhenotype()[index]);
+            fatherGenes.add(father.getPhenotype()[index]);
+            motherGenes.add(mother.getPhenotype()[index]);
 
             index++;
 
@@ -76,11 +72,11 @@ public class OrderedCrossing implements Crossing {
 
         for (int i = firstCrossingIndex; i < secondCrossingIndex; i++) {
 
-            sonGenes[i] = newMother.getPhenotype()[i];
-            fatherGenes.remove(fatherGenes.get(fatherGenes.indexOf(newMother.getPhenotype()[i])));
+            sonGenes[i] = mother.getPhenotype()[i];
+            fatherGenes.remove(fatherGenes.get(fatherGenes.indexOf(mother.getPhenotype()[i])));
 
-            daughterGenes[i] = newFather.getPhenotype()[i];
-            motherGenes.remove(motherGenes.get(motherGenes.indexOf(newFather.getPhenotype()[i])));
+            daughterGenes[i] = father.getPhenotype()[i];
+            motherGenes.remove(motherGenes.get(motherGenes.indexOf(father.getPhenotype()[i])));
 
 
         }
@@ -91,7 +87,7 @@ public class OrderedCrossing implements Crossing {
         int k = 0;
         while (k != fatherGenes.size()) {
 
-            if (j == phenotypeLength + 1) {
+            if (j == phenotypeLength) {
                 j = j % phenotypeLength;
 
                 sonGenes[j] = fatherGenes.get(k);
@@ -112,10 +108,6 @@ public class OrderedCrossing implements Crossing {
         }
 
 
-        sonGenes[0] = 1;
-        daughterGenes[0] = 1;
-
-
         successors[0] = new Phenotype(sonGenes);
         successors[1] = new Phenotype(daughterGenes);
         return successors;
@@ -131,7 +123,7 @@ public class OrderedCrossing implements Crossing {
         Phenotype mother = new Phenotype(motherGenes);
         Phenotype father = new Phenotype(fatherGenes);
 
-        OrderedCrossing crossing = new OrderedCrossing();
+        TwoPointsCrossing crossing = new TwoPointsCrossing();
 
         System.out.println(Arrays.toString(crossing.crossover(mother, father)));
 

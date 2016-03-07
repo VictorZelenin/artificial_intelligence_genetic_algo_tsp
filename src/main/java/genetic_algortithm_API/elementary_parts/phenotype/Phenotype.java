@@ -90,6 +90,24 @@ public class Phenotype implements Serializable {
         return "Phenotype: genes =  " + Arrays.toString(phenotype);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Phenotype phenotype1 = (Phenotype) o;
+
+        if (status != phenotype1.status) return false;
+        return Arrays.equals(phenotype, phenotype1.phenotype);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(phenotype);
+        result = 31 * result + (status ? 1 : 0);
+        return result;
+    }
 
     // test unit
     public static void main(String[] args) {

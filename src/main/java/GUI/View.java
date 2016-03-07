@@ -41,6 +41,8 @@ public class View extends Application {
     private GraphicsContext graphicsContext;
     private City[] generatedCities;
 
+
+    private static int counter = 0;
     private Button startButton, nextButton;
 
     private int quantityOfCities, sizeOfPopulation, iterations;
@@ -104,15 +106,7 @@ public class View extends Application {
             }
 //
 //            setupRandomCities();
-//            CanonicalGeneticAlgorithm ga = null;
-//            try {
-//                ga = new CanonicalGeneticAlgorithm(1, getSizeOfPopulation(), getProbability(),
-//                        getIterations(), getCities());
-//            } catch (Exception e1) {
-//                e1.printStackTrace();
-//            }
-//            drawRelationsBetweenCities(ga);
-
+//
 
             System.out.println(quantityOfCities);
             System.out.println(probability);
@@ -195,22 +189,25 @@ public class View extends Application {
 
     private void initTextFields() {
 
-//        Label citiesLabel = new Label("Кількість міст :");
+
         numberOfCities = new TextField();
         numberOfCities.setPromptText("Кількість міст");
-//        GridPane.setConstraints(citiesLabel, 0, 0, 1, 1);
+        numberOfCities.setFocusTraversable(false);
         GridPane.setConstraints(numberOfCities, 0, 0, 1, 1);
 
         numberOfPopulation = new TextField();
         numberOfPopulation.setPromptText("Велечина популяції");
+        numberOfPopulation.setFocusTraversable(false);
         GridPane.setConstraints(numberOfPopulation, 0, 1);
 
         numberOfIterations = new TextField();
         numberOfIterations.setPromptText("Кількість ітерацій");
+        numberOfIterations.setFocusTraversable(false);
         GridPane.setConstraints(numberOfIterations, 0, 2);
 
         mutationProbability = new TextField();
         mutationProbability.setPromptText("Ймовірність мутацій");
+        mutationProbability.setFocusTraversable(false);
         GridPane.setConstraints(mutationProbability, 0, 3, 1, 1);
 
     }
@@ -219,21 +216,21 @@ public class View extends Application {
 
         typeOfSelection = new ComboBox<>();
         typeOfSelection.setPromptText("Оберіть оператор відбору.");
-        typeOfSelection.getItems().addAll("Пропорційний відбір.");
+        typeOfSelection.getItems().addAll("Пропорційний відбір.", "Турнірний відбір.");
         GridPane.setConstraints(typeOfSelection, 0, 4);
 
         typeOfSelection.setOnAction(e -> selectionType = typeOfSelection.getValue());
 
         typeOfCrossing = new ComboBox<>();
         typeOfCrossing.setPromptText("Оберіть оператор селекції.");
-        typeOfCrossing.getItems().addAll("2-х точковий кросовер.");
+        typeOfCrossing.getItems().addAll("Одноточковий кросовер.", "Двоточковий кросовер.", "Циклічний кросовер.");
         GridPane.setConstraints(typeOfCrossing, 0, 5);
 
         typeOfCrossing.setOnAction(e -> crossingType = typeOfCrossing.getValue());
 
         typeOfMutation = new ComboBox<>();
         typeOfMutation.setPromptText("Оберіть оператор мутації.");
-        typeOfMutation.getItems().addAll("Одноточкова мутація.");
+        typeOfMutation.getItems().addAll("Одноточкова мутація.", "Жадібна мутація.");
         GridPane.setConstraints(typeOfMutation, 0, 6);
 
         typeOfMutation.setOnAction(e -> mutationType = typeOfMutation.getValue());
@@ -287,6 +284,18 @@ public class View extends Application {
         startButton.setPrefSize(70, 35);
 
         exitButton.setOnAction(e -> Platform.exit());
+        // rewrite
+        startButton.setOnAction(e -> {
+            CanonicalGeneticAlgorithm ga = null;
+            try {
+                ga = new CanonicalGeneticAlgorithm(1, getSizeOfPopulation(), getProbability(),
+                        getIterations(), getCities());
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            drawRelationsBetweenCities(ga);
+
+        });
 
         BorderPane root = new BorderPane();
 
@@ -327,7 +336,6 @@ public class View extends Application {
 
     }
 
-    static int counter = 0;
 
     private void drawCities(Canvas canvas, GraphicsContext graphicsContext) {
 
@@ -376,24 +384,23 @@ public class View extends Application {
 
         int[] answer = ga.getResult().getPhenotype();
 
-        startButton.setOnAction(event -> {
-            for (int i = 0; i < answer.length; i++) {
 
-                if (i == answer.length - 1) {
-                    graphicsContext.beginPath();
+        for (int i = 0; i < answer.length; i++) {
+
+            if (i == answer.length - 1) {
+                graphicsContext.beginPath();
 //                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
-                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
-                    graphicsContext.lineTo(generatedCities[answer[0] - 1].getX(), generatedCities[answer[0] - 1].getY());
-                    graphicsContext.stroke();
-                } else {
-                    graphicsContext.beginPath();
-                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
-                    graphicsContext.lineTo(generatedCities[answer[i + 1] - 1].getX(), generatedCities[answer[i + 1] - 1].getY());
-                    graphicsContext.stroke();
-                }
-
+                graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
+                graphicsContext.lineTo(generatedCities[answer[0] - 1].getX(), generatedCities[answer[0] - 1].getY());
+                graphicsContext.stroke();
+            } else {
+                graphicsContext.beginPath();
+                graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
+                graphicsContext.lineTo(generatedCities[answer[i + 1] - 1].getX(), generatedCities[answer[i + 1] - 1].getY());
+                graphicsContext.stroke();
             }
-        });
+
+        }
 
     }
 

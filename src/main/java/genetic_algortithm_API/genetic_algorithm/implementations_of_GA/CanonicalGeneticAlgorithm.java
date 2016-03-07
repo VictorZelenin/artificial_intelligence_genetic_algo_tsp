@@ -7,7 +7,7 @@ import genetic_algortithm_API.exceptions.IllegalLengthOfPhenotypeException;
 import genetic_algortithm_API.exceptions.InvalidGeneException;
 import genetic_algortithm_API.exceptions.SelectionForCrossoverException;
 import genetic_algortithm_API.genetic_algorithm.interface_of_GA.GeneticAlgorithm;
-import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.OrderedCrossing;
+import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.TwoPointsCrossing;
 import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.mutation.SinglePointMutation;
 import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.selection.ProportionalSelection;
 import genetic_algortithm_API.genetics_operators.interfaces_of_genetics_operators.Crossing;
@@ -16,7 +16,6 @@ import genetic_algortithm_API.genetics_operators.interfaces_of_genetics_operator
 import genetic_algortithm_API.routes.Routes;
 import genetic_algortithm_API.routes.routes_weight_func_impl.CoordinatesWeightFunction;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,20 +29,20 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
     private Phenotype result;
 
 
-    public CanonicalGeneticAlgorithm(int startCityID, int sizeOfPopulation, double mutationProbability,
+    public CanonicalGeneticAlgorithm(int sizeOfPopulation, double mutationProbability,
                                      int maxNumberOfIterations) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
 
         ArrayList<Phenotype> phenotypes = new ArrayList<>();
 //        this.routes = routes;
         routes = new Routes("input.txt", new CoordinatesWeightFunction());
 //        routes.printMatrix();
-        currentPopulation = new Population(sizeOfPopulation, routes, startCityID);
+        currentPopulation = new Population(sizeOfPopulation, routes);
 
 //
         for (int i = 0; i < maxNumberOfIterations; i++) {
 
 
-            crossover(new OrderedCrossing());
+            crossover(new TwoPointsCrossing());
 
             mutate(new SinglePointMutation(), mutationProbability);
 
@@ -69,12 +68,12 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
                                      int maxNumberOfIterations, City[] cities) throws Exception {
         ArrayList<Phenotype> phenotypes = new ArrayList<>();
         routes = new Routes(cities, new CoordinatesWeightFunction());
-        currentPopulation = new Population(sizeOfPopulation, routes, startCityID);
+        currentPopulation = new Population(sizeOfPopulation, routes);
 
         for (int i = 0; i < maxNumberOfIterations; i++) {
 
 
-            crossover(new OrderedCrossing());
+            crossover(new TwoPointsCrossing());
 
             mutate(new SinglePointMutation(), mutationProbability);
 
@@ -222,23 +221,23 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
     }
 
-    public Phenotype getResult(){
+    public Phenotype getResult() {
         return result;
     }
 
     public static void main(String[] args) throws Exception {
 
 
-        // 1 - startCity , 2 - sizeOfPopulation, 3 - mutationProb , 4 - iterations
+        //  1 - sizeOfPopulation, 2 - mutationProb , 3 - iterations
 
-        new CanonicalGeneticAlgorithm(1, 100, 0.25, 10000);
+        new CanonicalGeneticAlgorithm(100, 0.25, 100);
 
 //        System.out.println(Arrays.toString(GA.select(new ProportionalSelection())));
 
 
 //        GA.checkElementOfPopulation(GA.currentPopulation);
 //
-//        GA.crossover(new OrderedCrossing());
+//        GA.crossover(new TwoPointsCrossing());
 //
 //        GA.checkElementOfPopulation(GA.currentPopulation);
 //

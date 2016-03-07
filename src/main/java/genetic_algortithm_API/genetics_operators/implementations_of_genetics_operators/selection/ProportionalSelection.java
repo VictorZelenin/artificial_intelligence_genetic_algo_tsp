@@ -22,7 +22,6 @@ public class ProportionalSelection implements Selection {
         Phenotype phenotype;
 
         double averageFitnessValue = averageFitness(currentPopulation, routes);
-//        System.out.println(averageFitnessValue);
 
         for (Phenotype individual : currentPopulation.getPopulation()) {
 
@@ -34,13 +33,11 @@ public class ProportionalSelection implements Selection {
             if (fitnessValueDivPart >= probabilityValue) {
                 fitnessValueIntegerPart++;
             }
-//            System.out.println(fitnessValue);
 
             probabilityMap.put(individual, fitnessValueIntegerPart);
 
 
         }
-//        System.out.println(probabilityMap);
 
         phenotype = choosePhenotype(probabilityMap);
 
@@ -60,8 +57,6 @@ public class ProportionalSelection implements Selection {
         }
 
         int randomIndex = (int) (Math.random() * roulette.size());
-//        System.out.println(roulette.size());
-//        System.out.println(randomIndex);
 
         return roulette.get(randomIndex);
     }
@@ -85,7 +80,7 @@ public class ProportionalSelection implements Selection {
 
         ProportionalSelection selection = new ProportionalSelection();
         Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());
-        Population population = new Population(5, routes, 1);
+        Population population = new Population(5, routes);
 //        System.out.println(population);
         for (Phenotype phenotype : population.getPopulation()) {
             System.out.print(phenotype);
