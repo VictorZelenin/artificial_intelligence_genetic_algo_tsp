@@ -11,7 +11,7 @@ public class CyclicCrossing implements Crossing {
 
 
     @Override
-    public Phenotype[] crossover(Phenotype mother, Phenotype father) throws IllegalLengthOfPhenotypeException {
-        return new Phenotype[0];
+    public Phenotype crossover(Phenotype mother, Phenotype father) throws IllegalLengthOfPhenotypeException {
+        return null;
     }
 }

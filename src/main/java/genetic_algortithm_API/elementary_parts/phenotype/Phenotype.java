@@ -14,6 +14,7 @@ import java.util.Arrays;
 public class Phenotype implements Serializable {
 
     private final int[] phenotype;
+    private Routes routes;
 
 
     // нормувати єнумом , щоб збільшити точність
@@ -23,8 +24,16 @@ public class Phenotype implements Serializable {
     // initialize in different order
     public Phenotype(int[] phenotype) {
         this.phenotype = phenotype;
+        routes = new Routes("input.txt", new CoordinatesWeightFunction());
+//        validate(phenotype, routes);
 
+    }
 
+    public Phenotype(int[] phenotype, Routes routes) throws InvalidGeneException {
+        this.phenotype = phenotype;
+        this.routes = routes;
+
+        validate(phenotype, routes);
     }
 
     private void validate(int[] genes, Routes routes) throws InvalidGeneException {
@@ -48,6 +57,10 @@ public class Phenotype implements Serializable {
 
     public int[] getPhenotype() {
         return phenotype;
+    }
+
+    public Routes getRoutes() {
+        return routes;
     }
 
 
@@ -74,6 +87,10 @@ public class Phenotype implements Serializable {
 
 
         return fitnessFunctionValue;
+    }
+
+    public double getFitnessValue() {
+        return getFitnessValue(routes);
     }
 
 
@@ -110,7 +127,7 @@ public class Phenotype implements Serializable {
     }
 
     // test unit
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidGeneException {
 
         int[] genes = {1, 3, 4, 2};
         Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());

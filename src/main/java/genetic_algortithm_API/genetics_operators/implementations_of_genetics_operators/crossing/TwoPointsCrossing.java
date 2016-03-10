@@ -2,6 +2,7 @@ package genetic_algortithm_API.genetics_operators.implementations_of_genetics_op
 
 import genetic_algortithm_API.elementary_parts.phenotype.Phenotype;
 import genetic_algortithm_API.exceptions.IllegalLengthOfPhenotypeException;
+import genetic_algortithm_API.exceptions.InvalidGeneException;
 import genetic_algortithm_API.genetics_operators.interfaces_of_genetics_operators.Crossing;
 
 import java.util.*;
@@ -14,7 +15,7 @@ public class TwoPointsCrossing implements Crossing {
 
 
     @Override
-    public Phenotype[] crossover(Phenotype mother, Phenotype father) throws IllegalLengthOfPhenotypeException {
+    public Phenotype crossover(Phenotype mother, Phenotype father) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
 
 
         int phenotypeLength;
@@ -25,10 +26,8 @@ public class TwoPointsCrossing implements Crossing {
             phenotypeLength = father.getPhenotype().length;
         }
 
-        Phenotype[] successors = new Phenotype[2];
 
         int[] sonGenes = new int[father.getPhenotype().length];
-        int[] daughterGenes = new int[mother.getPhenotype().length];
 
         List<Integer> fatherGenes = new ArrayList<>();
         List<Integer> motherGenes = new ArrayList<>();
@@ -75,7 +74,6 @@ public class TwoPointsCrossing implements Crossing {
             sonGenes[i] = mother.getPhenotype()[i];
             fatherGenes.remove(fatherGenes.get(fatherGenes.indexOf(mother.getPhenotype()[i])));
 
-            daughterGenes[i] = father.getPhenotype()[i];
             motherGenes.remove(motherGenes.get(motherGenes.indexOf(father.getPhenotype()[i])));
 
 
@@ -91,14 +89,12 @@ public class TwoPointsCrossing implements Crossing {
                 j = j % phenotypeLength;
 
                 sonGenes[j] = fatherGenes.get(k);
-                daughterGenes[j] = motherGenes.get(k);
 
                 j++;
                 k++;
             } else {
 
                 sonGenes[j] = fatherGenes.get(k);
-                daughterGenes[j] = motherGenes.get(k);
 
                 k++;
                 j++;
@@ -108,9 +104,7 @@ public class TwoPointsCrossing implements Crossing {
         }
 
 
-        successors[0] = new Phenotype(sonGenes);
-        successors[1] = new Phenotype(daughterGenes);
-        return successors;
+        return new Phenotype(sonGenes);
     }
 
 
@@ -125,7 +119,7 @@ public class TwoPointsCrossing implements Crossing {
 
         TwoPointsCrossing crossing = new TwoPointsCrossing();
 
-        System.out.println(Arrays.toString(crossing.crossover(mother, father)));
+
 
     }
 }

@@ -7,7 +7,9 @@ import genetic_algortithm_API.exceptions.IllegalLengthOfPhenotypeException;
 import genetic_algortithm_API.exceptions.InvalidGeneException;
 import genetic_algortithm_API.exceptions.SelectionForCrossoverException;
 import genetic_algortithm_API.genetic_algorithm.interface_of_GA.GeneticAlgorithm;
+import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.SinglePointCrossing;
 import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.TwoPointsCrossing;
+import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.mutation.GreedyMutation;
 import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.mutation.SinglePointMutation;
 import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.selection.ProportionalSelection;
 import genetic_algortithm_API.genetics_operators.interfaces_of_genetics_operators.Crossing;
@@ -29,21 +31,27 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
     private Phenotype result;
 
 
+    public CanonicalGeneticAlgorithm(){}
+
     public CanonicalGeneticAlgorithm(int sizeOfPopulation, double mutationProbability,
                                      int maxNumberOfIterations) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
 
         ArrayList<Phenotype> phenotypes = new ArrayList<>();
-//        this.routes = routes;
+
+
+        // 1
         routes = new Routes("input.txt", new CoordinatesWeightFunction());
 //        routes.printMatrix();
+        // 2
         currentPopulation = new Population(sizeOfPopulation, routes);
 
 //
         for (int i = 0; i < maxNumberOfIterations; i++) {
 
-
+            // 3
             crossover(new TwoPointsCrossing());
 
+            // 4
             mutate(new SinglePointMutation(), mutationProbability);
 
             currentPopulation.getPopulation().add(getStrongestPhenotype());
@@ -95,7 +103,7 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
     }
 
     @Override
-    public void checkElementOfPopulation(Population currentPopulation) {
+    public void checkElementOfPopulation() {
         Phenotype strongestIndividual = getStrongestPhenotype();
         double shortestRoute;
         shortestRoute = strongestIndividual.getFitnessValue(routes);
@@ -150,57 +158,20 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
     }
 
     @Override
-    public Population crossover(Crossing crossing) {
-        Set<Phenotype> newGeneration = new HashSet<>();
+    public Population crossover(Crossing crossing) throws InvalidGeneException {
+        ArrayList<Phenotype> newGeneration = new ArrayList<>();
 
         int sizeOfPopulation = currentPopulation.getPopulation().size();
-        boolean isOddSize;
-        if (sizeOfPopulation % 2 == 0) {
-            isOddSize = false;
-        } else {
-            isOddSize = true;
-        }
 
-        for (int i = 0; i < sizeOfPopulation / 2 + 1; i++) {
-
+        for (int i = 0; i < sizeOfPopulation; i++) {
             Phenotype[] pairForCrossover = select(new ProportionalSelection());
-
-            Phenotype[] successors = null;
-
-
-            if (i == sizeOfPopulation / 2) {
-
-                if (isOddSize) {
-                    try {
-                        successors = crossing.crossover(pairForCrossover[0], pairForCrossover[1]);
-                    } catch (IllegalLengthOfPhenotypeException e) {
-                        System.err.println("Bad length of phenotypes");
-                    }
-
-                    if (successors[0].getFitnessValue(routes) > successors[1].getFitnessValue(routes)) {
-
-                        newGeneration.add(successors[1]);
-                    } else {
-                        newGeneration.add(successors[0]);
-                    }
-
-                } else {
-                    break;
-                }
-
-            } else {
-                try {
-                    successors = crossing.crossover(pairForCrossover[0], pairForCrossover[1]);
-                } catch (IllegalLengthOfPhenotypeException e) {
-                    System.err.println("Bad length of phenotypes");
-                }
-
-                newGeneration.add(successors[0]);
-                newGeneration.add(successors[1]);
-
+            System.out.println("Pair selected");
+            try {
+                newGeneration.add(crossing.crossover(pairForCrossover[0], pairForCrossover[1]));
+                System.out.println("crossed");
+            } catch (IllegalLengthOfPhenotypeException e) {
+                e.printStackTrace();
             }
-
-
         }
 
         currentPopulation.setPopulation(newGeneration);
@@ -211,12 +182,22 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
     @Override
     public void mutate(Mutation mutation, double mutationProbability) {
 
-        double randomValue = Math.random();
 
-        currentPopulation.getPopulation()
-                .stream()
-                .filter(phenotype -> randomValue <= mutationProbability)
-                .forEach(mutation::mutate);
+        for (int i = 0; i < currentPopulation.getPopulation().size(); i++) {
+
+//            double randomValue = ;
+
+            if (Math.random() < mutationProbability) {
+                mutation.mutate(currentPopulation.getPopulation().get(i), routes);
+            }
+
+        }
+
+
+//        currentPopulation.getPopulation()
+//                .stream()
+//                .filter(phenotype -> randomValue <= mutationProbability)
+//                .forEach(mutation::mutate);
 
 
     }
@@ -230,17 +211,7 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
         //  1 - sizeOfPopulation, 2 - mutationProb , 3 - iterations
 
-        new CanonicalGeneticAlgorithm(100, 0.25, 100);
-
-//        System.out.println(Arrays.toString(GA.select(new ProportionalSelection())));
-
-
-//        GA.checkElementOfPopulation(GA.currentPopulation);
-//
-//        GA.crossover(new TwoPointsCrossing());
-//
-//        GA.checkElementOfPopulation(GA.currentPopulation);
-//
+        new CanonicalGeneticAlgorithm(100, 0.1, 100);
     }
 
 }

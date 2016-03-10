@@ -2,6 +2,7 @@ package GUI;
 
 import genetic_algortithm_API.elementary_parts.city.City;
 import genetic_algortithm_API.genetic_algorithm.implementations_of_GA.CanonicalGeneticAlgorithm;
+import genetic_algortithm_API.genetic_algorithm.implementations_of_GA.ElitistGeneticAlgorithm;
 import genetic_algortithm_API.genetic_algorithm.interface_of_GA.GeneticAlgorithm;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -286,9 +287,9 @@ public class View extends Application {
         exitButton.setOnAction(e -> Platform.exit());
         // rewrite
         startButton.setOnAction(e -> {
-            CanonicalGeneticAlgorithm ga = null;
+            ElitistGeneticAlgorithm ga = null;
             try {
-                ga = new CanonicalGeneticAlgorithm(1, getSizeOfPopulation(), getProbability(),
+                ga = new ElitistGeneticAlgorithm(getSizeOfPopulation(), getProbability(),
                         getIterations(), getCities());
             } catch (Exception e1) {
                 e1.printStackTrace();
@@ -380,7 +381,7 @@ public class View extends Application {
 
     }
 
-    private void drawRelationsBetweenCities(CanonicalGeneticAlgorithm ga) {
+    private void drawRelationsBetweenCities(ElitistGeneticAlgorithm ga) {
 
         int[] answer = ga.getResult().getPhenotype();
 

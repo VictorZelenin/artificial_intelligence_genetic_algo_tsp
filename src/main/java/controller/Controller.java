@@ -14,13 +14,9 @@ public class Controller {
 
     public static void main(String[] args) throws Exception {
 
-        View view = new View();
+//        View view = new View();
 
         Application.launch(View.class);
-
-
-
-
 
 
     }

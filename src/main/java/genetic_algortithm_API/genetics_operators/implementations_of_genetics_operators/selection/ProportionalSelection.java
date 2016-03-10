@@ -45,6 +45,7 @@ public class ProportionalSelection implements Selection {
         return phenotype;
     }
 
+
     private Phenotype choosePhenotype(Map<Phenotype, Double> probabilityMap) {
 
 
@@ -79,13 +80,13 @@ public class ProportionalSelection implements Selection {
     public static void main(String[] args) throws Exception {
 
         ProportionalSelection selection = new ProportionalSelection();
-        Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());
-        Population population = new Population(5, routes);
+        Routes routes = new Routes(100, new CoordinatesWeightFunction());
+        Population population = new Population(100000, routes);
 //        System.out.println(population);
-        for (Phenotype phenotype : population.getPopulation()) {
-            System.out.print(phenotype);
-            System.out.println(" " + phenotype.getFitnessValue(routes));
-        }
+//        for (Phenotype phenotype : population.getPopulation()) {
+//            System.out.print(phenotype);
+//            System.out.println(" " + phenotype.getFitnessValue(routes));
+//        }
 
         Phenotype selectedPhenotype = selection.select(population, routes);
 
