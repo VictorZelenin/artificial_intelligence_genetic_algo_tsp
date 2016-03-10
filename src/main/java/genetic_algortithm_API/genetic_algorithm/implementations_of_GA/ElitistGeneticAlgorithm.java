@@ -48,7 +48,7 @@ public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
 
             mutate(new SinglePointMutation(), mutationProbability);
 
-//            result = currentPopulation.getPopulation().get(0);
+
             results.add(currentPopulation.getPopulation().get(0));
             System.out.println(currentPopulation.getPopulation().get(0).getFitnessValue(routes));
 
