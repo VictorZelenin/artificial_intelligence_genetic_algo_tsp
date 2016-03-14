@@ -62,6 +62,11 @@ public class View extends Application {
     private TextField numberOfCities, numberOfPopulation, numberOfIterations, mutationProbability;
 
 
+    // starting point
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
