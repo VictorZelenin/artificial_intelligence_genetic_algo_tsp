@@ -6,7 +6,6 @@ import genetic_algortithm_API.elementary_parts.population.Population;
 import genetic_algortithm_API.exceptions.IllegalLengthOfPhenotypeException;
 import genetic_algortithm_API.exceptions.InvalidGeneException;
 import genetic_algortithm_API.genetic_algorithm.interface_of_GA.GeneticAlgorithm;
-import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.SinglePointCrossing;
 import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.TwoPointsCrossing;
 import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.mutation.GreedyMutation;
 import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.mutation.SinglePointMutation;
@@ -28,6 +27,46 @@ public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
     private Routes routes;
     private Phenotype result;
 
+
+    public ElitistGeneticAlgorithm(int sizeOfPopulation, double mutationProbability,
+                                   int maxNumberOfIterations, City[] cities,
+                                   Crossing crossing, Mutation mutation) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
+
+        routes = new Routes(cities, new CoordinatesWeightFunction());
+
+
+        currentPopulation = new Population(sizeOfPopulation, routes);
+
+
+        ArrayList<Phenotype> results = new ArrayList<>();
+
+        for (int i = 0; i < maxNumberOfIterations; i++) {
+
+
+            checkElementOfPopulation();
+
+            createNewGeneration(crossing);
+
+            mutate(mutation, mutationProbability);
+
+            System.out.println(currentPopulation.getPopulation().get(0).getFitnessValue(routes));
+            results.add(currentPopulation.getPopulation().get(0));
+
+
+        }
+
+        results.forEach(o -> System.out.print(o.getFitnessValue(routes) + " "));
+        System.out.println();
+        Collections.sort(results, (o1, o2) -> (Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes))));
+        System.out.println("size " + results.size());
+        System.out.println("iterations " + maxNumberOfIterations);
+        results.forEach(o -> System.out.print(o.getFitnessValue(routes) + " "));
+        result = results.get(0);
+        System.out.println("RESULT: " + result.getFitnessValue(routes));
+
+    }
+
+
     public ElitistGeneticAlgorithm(int sizeOfPopulation, double mutationProbability,
                                    int maxNumberOfIterations, City[] cities) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
 
@@ -48,13 +87,18 @@ public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
 
             mutate(new SinglePointMutation(), mutationProbability);
 
-
-            results.add(currentPopulation.getPopulation().get(0));
             System.out.println(currentPopulation.getPopulation().get(0).getFitnessValue(routes));
+            results.add(currentPopulation.getPopulation().get(0));
+
 
         }
+
+        results.forEach(o -> System.out.print(o.getFitnessValue(routes) + " "));
+        System.out.println();
         Collections.sort(results, (o1, o2) -> (Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes))));
-//        results.forEach(o -> System.out.print(o.getFitnessValue(routes) + " "));
+        System.out.println("size " + results.size());
+        System.out.println("iterations " + maxNumberOfIterations);
+        results.forEach(o -> System.out.print(o.getFitnessValue(routes) + " "));
         result = results.get(0);
         System.out.println("RESULT: " + result.getFitnessValue(routes));
 
@@ -107,13 +151,6 @@ public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
 
     }
 
-    private boolean checkResults(ArrayList<Double> results) {
-
-        boolean result = false;
-
-
-        return result;
-    }
 
     public Phenotype getResult() {
         return result;
@@ -138,7 +175,7 @@ public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
 
 
         int j = 0;
-        for (int i = currentPopulation.getPopulation().size() / 2; i < currentPopulation.getPopulation().size(); i++) {
+        for (int i = currentPopulation.getPopulation().size() / 4; i < currentPopulation.getPopulation().size(); i++) {
             currentPopulation.getPopulation().set(i, crossing.crossover(currentPopulation.getPopulation().get(j),
                     currentPopulation.getPopulation().get(j + 1)));
 

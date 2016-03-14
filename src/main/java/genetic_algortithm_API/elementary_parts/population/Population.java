@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Population implements Cloneable {
 
-    // нету одинаковых особей в популяции
+
     private ArrayList<Phenotype> population;
 
 

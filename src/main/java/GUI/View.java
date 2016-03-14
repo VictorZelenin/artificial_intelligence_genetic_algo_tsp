@@ -4,6 +4,10 @@ import genetic_algortithm_API.elementary_parts.city.City;
 import genetic_algortithm_API.genetic_algorithm.implementations_of_GA.CanonicalGeneticAlgorithm;
 import genetic_algortithm_API.genetic_algorithm.implementations_of_GA.ElitistGeneticAlgorithm;
 import genetic_algortithm_API.genetic_algorithm.interface_of_GA.GeneticAlgorithm;
+import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.SinglePointCrossing;
+import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.crossing.TwoPointsCrossing;
+import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.mutation.GreedyMutation;
+import genetic_algortithm_API.genetics_operators.implementations_of_genetics_operators.mutation.SinglePointMutation;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -56,12 +60,6 @@ public class View extends Application {
     private RadioButton initRandomCities, initCities;
 
     private TextField numberOfCities, numberOfPopulation, numberOfIterations, mutationProbability;
-//    private Label citiesLabel, populationLabel, iterationsLabel, mutationProbLabel;
-
-
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
 
 
     @Override
@@ -85,7 +83,8 @@ public class View extends Application {
                 iterations = Integer.parseInt(numberOfIterations.getText());
                 sizeOfPopulation = Integer.parseInt(numberOfPopulation.getText());
 
-                if (selectionType == null || crossingType == null || mutationType == null || typeOfGeneratingCities == null) {
+                if (selectionType == null || crossingType == null || mutationType == null || typeOfGeneratingCities == null
+                        || quantityOfCities < 3 || probability > 1) {
                     throw new Exception();
                 }
 
@@ -217,14 +216,14 @@ public class View extends Application {
 
         typeOfSelection = new ComboBox<>();
         typeOfSelection.setPromptText("Оберіть оператор відбору.");
-        typeOfSelection.getItems().addAll("Пропорційний відбір.", "Турнірний відбір.");
+        typeOfSelection.getItems().addAll("Елітарний відбір.");
         GridPane.setConstraints(typeOfSelection, 0, 4);
 
         typeOfSelection.setOnAction(e -> selectionType = typeOfSelection.getValue());
 
         typeOfCrossing = new ComboBox<>();
         typeOfCrossing.setPromptText("Оберіть оператор селекції.");
-        typeOfCrossing.getItems().addAll("Одноточковий кросовер.", "Двоточковий кросовер.", "Циклічний кросовер.");
+        typeOfCrossing.getItems().addAll("Одноточковий кросовер.", "Двоточковий кросовер.");
         GridPane.setConstraints(typeOfCrossing, 0, 5);
 
         typeOfCrossing.setOnAction(e -> crossingType = typeOfCrossing.getValue());
@@ -288,13 +287,35 @@ public class View extends Application {
         // rewrite
         startButton.setOnAction(e -> {
             ElitistGeneticAlgorithm ga = null;
+
+
             try {
-                ga = new ElitistGeneticAlgorithm(getSizeOfPopulation(), getProbability(),
-                        getIterations(), getCities());
+                if (crossingType.equals("Одноточковий кросовер.") && mutationType.equals("Одноточкова мутація.")) {
+                    ga = new ElitistGeneticAlgorithm(getSizeOfPopulation(), getProbability(),
+                            getIterations(), getCities(), new SinglePointCrossing(), new SinglePointMutation());
+
+                }
+                if (crossingType.equals("Одноточковий кросовер.") && mutationType.equals("Жадібна мутація.")) {
+                    ga = new ElitistGeneticAlgorithm(getSizeOfPopulation(), getProbability(),
+                            getIterations(), getCities(), new SinglePointCrossing(), new GreedyMutation());
+
+                }
+                if (crossingType.equals("Двоточковий кросовер.") && mutationType.equals("Одноточкова мутація.")) {
+
+                    ga = new ElitistGeneticAlgorithm(getSizeOfPopulation(), getProbability(),
+                            getIterations(), getCities(), new TwoPointsCrossing(), new SinglePointMutation());
+                }
+                if (crossingType.equals("Двоточковий кросовер.") && mutationType.equals("Жадібна мутація.")) {
+                    ga = new ElitistGeneticAlgorithm(getSizeOfPopulation(), getProbability(),
+                            getIterations(), getCities(), new TwoPointsCrossing(), new GreedyMutation());
+                }
+
+
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
             drawRelationsBetweenCities(ga);
+
 
         });
 
