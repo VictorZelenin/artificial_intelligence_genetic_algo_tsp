@@ -24,7 +24,7 @@ public class Phenotype implements Serializable {
     // initialize in different order
     public Phenotype(int[] phenotype) {
         this.phenotype = phenotype;
-        routes = new Routes("input.txt", new CoordinatesWeightFunction());
+        //routes = new Routes("input.txt", new CoordinatesWeightFunction());
 //        validate(phenotype, routes);
 
     }
