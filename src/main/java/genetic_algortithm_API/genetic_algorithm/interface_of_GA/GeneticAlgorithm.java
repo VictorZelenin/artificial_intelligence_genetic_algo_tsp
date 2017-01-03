@@ -14,12 +14,9 @@ public interface GeneticAlgorithm {
 
     void checkElementOfPopulation();
 
-
     Phenotype[] select(Selection selection);
 
     Population crossover(Crossing crossing) throws InvalidGeneException;
 
     void mutate(Mutation mutation, double probability);
-
-
 }

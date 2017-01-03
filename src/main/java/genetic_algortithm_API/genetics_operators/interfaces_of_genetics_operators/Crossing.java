@@ -12,5 +12,4 @@ import genetic_algortithm_API.exceptions.InvalidGeneException;
 public interface Crossing {
 
     Phenotype crossover(Phenotype mother, Phenotype father) throws IllegalLengthOfPhenotypeException, InvalidGeneException;
-
 }

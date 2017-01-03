@@ -7,7 +7,5 @@ import genetic_algortithm_API.elementary_parts.city.City;
  */
 @FunctionalInterface
 public interface RouteFunction {
-
     double getRouteWeightFunction(City firstCity, City secondCity);
-
 }

@@ -13,38 +13,24 @@ import java.util.*;
  */
 
 public class Population implements Cloneable {
-
-
     private ArrayList<Phenotype> population;
 
-
     public Population(int sizeOfPopulation, Routes routes) throws InvalidGeneException {
-
         population = generateFirstPopulation(sizeOfPopulation, routes);
-
     }
 
-
     private ArrayList<Phenotype> generateFirstPopulation(int size, Routes routes) throws InvalidGeneException {
-
         int[] possibleGenes = routes.getCitiesID();
         ArrayList<Phenotype> firstPopulation = new ArrayList<>(size);
 
         for (int j = 0; j < size; j++) {
-
             firstPopulation.add(new Phenotype(shuffleArray(possibleGenes), routes));
-
         }
-
-
-//        System.out.println(firstPopulation);
 
         return firstPopulation;
     }
 
     private int[] shuffleArray(int[] array) {
-
-
         int index;
         Random random = new Random();
         for (int i = array.length - 1; i > 0; i--) {
@@ -59,7 +45,6 @@ public class Population implements Cloneable {
         return Arrays.copyOfRange(array, 0, array.length);
     }
 
-
     public void setPopulation(ArrayList<Phenotype> population) {
         this.population = population;
     }
@@ -72,23 +57,4 @@ public class Population implements Cloneable {
     public String toString() {
         return "Population(phenotypes[])" + population;
     }
-
-
-    // testing unit
-    public static void main(String[] args) throws InvalidGeneException {
-
-        Population firstPopulation = null;
-        Routes routes = new Routes(100, new CoordinatesWeightFunction());
-
-
-        firstPopulation = new Population(1000000, routes);
-
-
-//        for (Phenotype phenotype : firstPopulation.population) {
-//            System.out.println(phenotype + " " + phenotype.getFitnessValue(routes));
-//        }
-
-    }
-
-
 }

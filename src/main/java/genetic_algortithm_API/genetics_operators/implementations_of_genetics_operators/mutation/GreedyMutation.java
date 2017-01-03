@@ -13,17 +13,11 @@ import java.util.*;
  * Created by User on 07.03.2016.
  */
 public class GreedyMutation implements Mutation {
-
     @Override
     public void mutate(Phenotype individual, Routes routes) {
-
         int phenotypeLength = individual.getPhenotype().length;
-
         int firstRandomIndex, secondRandomIndex;
-
-
         double[][] matrix = routes.getRoutesMatrix();
-
 
         do {
             firstRandomIndex = (int) (Math.random() * (phenotypeLength - 1));
@@ -39,18 +33,11 @@ public class GreedyMutation implements Mutation {
 
         }
 
-
-//        individual.getRoutes().printMatrix();
-//        System.out.println();
         Phenotype copyOfIndividual;
         copyOfIndividual = new Phenotype(Arrays.copyOfRange(individual.getPhenotype(), 0, individual.getPhenotype().length));
-
         for (int i = firstRandomIndex + 1; i <= secondRandomIndex; i++) {
-
-
             swap(individual.getPhenotype(), i, chooseNextCity(copyOfIndividual, i - 1, secondRandomIndex, matrix));
         }
-
     }
 
     private void swap(int[] phenotype, int a, int b) {
@@ -60,10 +47,7 @@ public class GreedyMutation implements Mutation {
     }
 
     private int chooseNextCity(Phenotype phenotype, int firstIndex, int secondIndex, double[][] matrix) {
-
-
         Map<Integer, Double> map = new HashMap<>();
-
 
         for (int i = firstIndex + 1; i <= secondIndex; i++) {
             map.put(phenotype.getPhenotype()[i], matrix[firstIndex][phenotype.getPhenotype()[i] - 1]);
@@ -72,7 +56,6 @@ public class GreedyMutation implements Mutation {
         final Map<Integer, Double> sortedMap =
                 new TreeMap<>((Comparator<Integer>) (lhs, rhs) -> Double.compare(map.get(lhs), map.get(rhs)));
         sortedMap.putAll(map);
-//        System.out.println(sortedMap);
 
         return indexOf(phenotype.getPhenotype(), sortedMap.keySet()
                 .stream()
@@ -88,14 +71,5 @@ public class GreedyMutation implements Mutation {
         }
 
         return -1;
-    }
-
-
-    // testing unit
-    public static void main(String[] args) throws InvalidGeneException {
-        Phenotype phenotype = new Phenotype(new int[]{1, 2, 3, 4, 5, 8, 6, 7}, new Routes(8, new CoordinatesWeightFunction()));
-//        new GreedyMutation().mutate(phenotype);
-
-
     }
 }

@@ -13,11 +13,8 @@ import java.util.Arrays;
  */
 @SuppressWarnings("Duplicates")
 public class SinglePointCrossing implements Crossing {
-
-
     @Override
     public Phenotype crossover(Phenotype mother, Phenotype father) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
-
         int phenotypeLength;
         if (mother.getPhenotype().length != father.getPhenotype().length) {
             throw new IllegalLengthOfPhenotypeException();
@@ -25,29 +22,20 @@ public class SinglePointCrossing implements Crossing {
             phenotypeLength = mother.getPhenotype().length;
         }
 
-
         int[] sonGenes = new int[phenotypeLength];
-
-//        int crossingPoint = 0;
         int crossingPoint = (int) (Math.random() * (phenotypeLength - 1));
-        //ystem.out.println(crossingPoint);
-
         ArrayList<Integer> usedGenes = new ArrayList<>();
 
         int i = 0;
         while (i != phenotypeLength) {
-
             if (i <= crossingPoint) {
                 sonGenes[i] = mother.getPhenotype()[i];
                 usedGenes.add(mother.getPhenotype()[i]);
                 i++;
-
             } else {
-
                 int j = crossingPoint + 1;
                 int k = crossingPoint + 1;
                 while (j != phenotypeLength) {
-
                     if (!usedGenes.contains(father.getPhenotype()[j])) {
                         sonGenes[i] = father.getPhenotype()[j];
                         usedGenes.add(father.getPhenotype()[j]);
@@ -57,7 +45,6 @@ public class SinglePointCrossing implements Crossing {
                         j++;
                         continue;
                     }
-
                 }
 
 
@@ -71,25 +58,10 @@ public class SinglePointCrossing implements Crossing {
                         k++;
                         continue;
                     }
-
                 }
-
             }
-
         }
 
-       // System.out.println(Arrays.toString(sonGenes));
         return new Phenotype(sonGenes);
-    }
-
-    // testing unit
-    public static void main(String[] args) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
-
-        Phenotype father = new Phenotype(new int[]{1, 2, 4, 5, 3, 6});
-        Phenotype mother = new Phenotype(new int[]{3, 5, 1, 2, 4, 6});
-
-        new SinglePointCrossing().crossover(father, mother);
-
-
     }
 }

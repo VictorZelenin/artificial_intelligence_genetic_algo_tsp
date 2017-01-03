@@ -9,11 +9,8 @@ import static java.lang.Math.*;
  * Created by User on 24.02.2016.
  */
 public class RandomWeightFunction implements RouteFunction {
-
     @Override
     public  double getRouteWeightFunction(City firstCity, City secondCity) {
-
-
         return random() * sqrt(pow(firstCity.getX() - secondCity.getX(), 2) + pow(firstCity.getY() - secondCity.getY(), 2));
     }
 }

@@ -12,5 +12,4 @@ import genetic_algortithm_API.routes.Routes;
 public interface Selection {
 
     Phenotype select(Population currentPopulation, Routes routes);
-
 }

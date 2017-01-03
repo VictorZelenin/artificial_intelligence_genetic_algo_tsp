@@ -13,12 +13,8 @@ import java.util.Arrays;
 
 // it worked correct
 public class SinglePointMutation implements Mutation {
-
-
     @Override
     public void mutate(Phenotype individual, Routes routes) {
-
-
         int firstRandomIndex = (int) ((Math.random() * (individual.getPhenotype().length - 1) + 1));
         int secondRandomIndex;
 
@@ -28,27 +24,11 @@ public class SinglePointMutation implements Mutation {
         while (secondRandomIndex == firstRandomIndex);
 
         swap(individual, firstRandomIndex, secondRandomIndex);
-
     }
 
     private void swap(Phenotype individual, int firstRandomIndex, int secondRandomIndex) {
         int temp = individual.getPhenotype()[firstRandomIndex];
         individual.getPhenotype()[firstRandomIndex] = individual.getPhenotype()[secondRandomIndex];
         individual.getPhenotype()[secondRandomIndex] = temp;
-
     }
-
-
-    // testing unit
-    public static void main(String[] args) throws InvalidGeneException {
-        SinglePointMutation mutation = new SinglePointMutation();
-
-        int[] genes = {1, 2, 3, 4, 5, 6, 7, 8};
-        System.out.println(Arrays.toString(genes));
-        Phenotype phenotype = new Phenotype(genes);
-
-//        mutation.mutate(phenotype);
-        System.out.println(phenotype);
-    }
-
 }

@@ -8,8 +8,6 @@ import genetic_algortithm_API.genetics_operators.interfaces_of_genetics_operator
  * Created by User on 07.03.2016.
  */
 public class CyclicCrossing implements Crossing {
-
-
     @Override
     public Phenotype crossover(Phenotype mother, Phenotype father) throws IllegalLengthOfPhenotypeException {
         return null;

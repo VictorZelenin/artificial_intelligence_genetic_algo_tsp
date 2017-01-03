@@ -39,13 +39,11 @@ import java.util.List;
  * Created by User on 02.03.2016.
  */
 public class View extends Application {
-
     private Stage window;
     private Scene initScene, mainScene;
     private Canvas canvas;
     private GraphicsContext graphicsContext;
     private City[] generatedCities;
-
 
     private static int counter = 0;
     private Button startButton, nextButton;
@@ -61,7 +59,6 @@ public class View extends Application {
 
     private TextField numberOfCities, numberOfPopulation, numberOfIterations, mutationProbability;
 
-
     // starting point
     public static void main(String[] args) {
         Application.launch(args);
@@ -69,10 +66,7 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         window = primaryStage;
-
-
         nextButton = new Button("Далі");
         Button exitButton = new Button("Вихід");
         Label label = new Label("Введіть параметри алгоритму :");
@@ -96,7 +90,6 @@ public class View extends Application {
                 if (typeOfGeneratingCities.equals("Random")) {
                     setupRandomCities();
                 } else {
-//                    primaryStage.setScene(mainScene);
                     drawCities(canvas, graphicsContext);
                 }
 
@@ -109,20 +102,6 @@ public class View extends Application {
 
                 initAlert.showAndWait();
             }
-//
-//            setupRandomCities();
-//
-
-            System.out.println(quantityOfCities);
-            System.out.println(probability);
-            System.out.println(iterations);
-            System.out.println(sizeOfPopulation);
-            System.out.println(selectionType);
-            System.out.println(crossingType);
-            System.out.println(mutationType);
-            System.out.println(typeOfGeneratingCities);
-
-
         });
 
 
@@ -177,24 +156,16 @@ public class View extends Application {
             graphicsContext.fillOval(x, y, 6, 6);
             graphicsContext.fillText(String.valueOf(i + 1), x, y); // id , x, y
             graphicsContext.stroke();
-
         }
-
-
     }
 
-
     private void setupButtonsPane(HBox buttonsPane, Button firstButton, Button secondButton) {
-
-
         buttonsPane.setPadding(new Insets(50));
         buttonsPane.setMargin(firstButton, new Insets(0, 300, 10, 80));
         buttonsPane.getChildren().addAll(firstButton, secondButton);
     }
 
     private void initTextFields() {
-
-
         numberOfCities = new TextField();
         numberOfCities.setPromptText("Кількість міст");
         numberOfCities.setFocusTraversable(false);
@@ -214,11 +185,9 @@ public class View extends Application {
         mutationProbability.setPromptText("Ймовірність мутацій");
         mutationProbability.setFocusTraversable(false);
         GridPane.setConstraints(mutationProbability, 0, 3, 1, 1);
-
     }
 
     private void initComboboxes() {
-
         typeOfSelection = new ComboBox<>();
         typeOfSelection.setPromptText("Оберіть оператор відбору.");
         typeOfSelection.getItems().addAll("Елітарний відбір.");
@@ -239,8 +208,6 @@ public class View extends Application {
         GridPane.setConstraints(typeOfMutation, 0, 6);
 
         typeOfMutation.setOnAction(e -> mutationType = typeOfMutation.getValue());
-
-
     }
 
     private void initRadioButtons() {
@@ -263,7 +230,6 @@ public class View extends Application {
         });
     }
 
-
     private void loadCSSFile(String fileName) throws MalformedURLException {
         File file = new File(fileName);
         URL url = file.toURI().toURL();
@@ -281,10 +247,6 @@ public class View extends Application {
         graphicsContext = canvas.getGraphicsContext2D();
         initDraw(graphicsContext);
 
-//        drawCities(canvas, graphicsContext, citiesCoordinates);
-//        drawRelationsBetweenCities(startButton, graphicsContext, citiesCoordinates);
-
-
         exitButton.setPrefSize(70, 35);
         startButton.setPrefSize(70, 35);
 
@@ -292,8 +254,6 @@ public class View extends Application {
         // rewrite
         startButton.setOnAction(e -> {
             ElitistGeneticAlgorithm ga = null;
-
-
             try {
                 if (crossingType.equals("Одноточковий кросовер.") && mutationType.equals("Одноточкова мутація.")) {
                     ga = new ElitistGeneticAlgorithm(getSizeOfPopulation(), getProbability(),
@@ -315,13 +275,10 @@ public class View extends Application {
                             getIterations(), getCities(), new TwoPointsCrossing(), new GreedyMutation());
                 }
 
-
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
             drawRelationsBetweenCities(ga);
-
-
         });
 
         BorderPane root = new BorderPane();
@@ -332,14 +289,10 @@ public class View extends Application {
         buttonsPane.setMargin(exitButton, new Insets(0, 500, 10, 100));
         buttonsPane.getChildren().addAll(exitButton, startButton);
 
-
         root.setBottom(buttonsPane);
         root.setCenter(canvas);
 
-
         mainScene = new Scene(root, 950, 580);
-
-
     }
 
     private void initDraw(GraphicsContext gc) {
@@ -360,15 +313,10 @@ public class View extends Application {
         gc.setFill(Color.CORAL);
         gc.setStroke(Color.BLUE);
         gc.setLineWidth(0.5);
-
     }
 
-
     private void drawCities(Canvas canvas, GraphicsContext graphicsContext) {
-
         generatedCities = new City[quantityOfCities];
-
-
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
                 event -> {
                     if (counter == quantityOfCities) {
@@ -389,10 +337,7 @@ public class View extends Application {
 
                     }
                 });
-
-
     }
-
 
     private void drawRelationsBetweenCities(Button startButton, GraphicsContext graphicsContext, List<double[]> cities) {
         startButton.setOnAction(event -> {
@@ -404,7 +349,6 @@ public class View extends Application {
                 graphicsContext.stroke();
             }
         });
-
     }
 
     private void drawRelationsBetweenCities(ElitistGeneticAlgorithm ga) {
@@ -416,7 +360,6 @@ public class View extends Application {
 
             if (i == answer.length - 1) {
                 graphicsContext.beginPath();
-//                    graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
                 graphicsContext.moveTo(generatedCities[answer[i] - 1].getX(), generatedCities[answer[i] - 1].getY());
                 graphicsContext.lineTo(generatedCities[answer[0] - 1].getX(), generatedCities[answer[0] - 1].getY());
                 graphicsContext.stroke();
@@ -426,11 +369,8 @@ public class View extends Application {
                 graphicsContext.lineTo(generatedCities[answer[i + 1] - 1].getX(), generatedCities[answer[i + 1] - 1].getY());
                 graphicsContext.stroke();
             }
-
         }
-
     }
-
 
     public City[] getCities() {
         return generatedCities;

@@ -16,76 +16,55 @@ import java.util.Scanner;
 
 // rewrite scanner parsing!
 public class Routes {
-
     private double[][] routesMatrix;
     private int[] citiesID;
     private City[] cities;
     private int quantityOfRoutes;
 
-
     public Routes(String fileName, RouteFunction routeFunction) {
-
         cities = generateCitiesFromFile(fileName);
-
         routesMatrix = generateRoutesMatrix(cities, routeFunction);
-
     }
 
     public Routes(City[] cities, RouteFunction routeFunction) {
         this.cities = cities;
-
         routesMatrix = generateRoutesMatrix(cities, routeFunction);
-
         getCitiesID(cities);
-
     }
-
 
     // no used routeMatrix
     public Routes(int quantityOfRoutes, RouteFunction routeFunction) {
         cities = new City[quantityOfRoutes];
         generateRandomCities(quantityOfRoutes, this.cities);
-
         routesMatrix = generateRoutesMatrix(cities, routeFunction);
         this.quantityOfRoutes = quantityOfRoutes;
-
     }
-
 
     public static double getWeight(City firstCity, City secondCity, RouteFunction weightFunction) {
         return weightFunction.getRouteWeightFunction(firstCity, secondCity);
     }
 
-
     public int getQuantityOfRoutes() {
         return quantityOfRoutes;
     }
-
 
     public City[] getCities() {
         return cities;
     }
 
     private void generateRandomCities(int quantityOfRoutes, City[] cities) {
-
         citiesID = new int[quantityOfRoutes];
 
         for (int i = 0; i < quantityOfRoutes; i++) {
-
             cities[i] = new City(i + 1);
-
             citiesID[i] = i + 1;
         }
-
     }
 
     private City[] generateCitiesFromFile(String fileName) {
-
         City[] cities;
-
         File file = new File(fileName);
         Scanner scanner = null;
-
 
         if (!file.exists()) {
             try {
@@ -102,8 +81,6 @@ public class Routes {
         }
 
         int N = Integer.parseInt(scanner.next());
-
-
         cities = new City[N];
         citiesID = new int[N];
         quantityOfRoutes = N;
@@ -115,40 +92,31 @@ public class Routes {
             i++;
         }
 
-
         return cities;
     }
 
     private double[][] generateRoutesMatrix(City[] cities, RouteFunction routeFunction) {
-
         int N = cities.length;
         quantityOfRoutes = N;
 
         double[][] matrix = new double[N][N];
 
-
         for (int i = 0; i < cities.length; i++) {
             for (int j = 0; j < cities.length; j++) {
-
                 matrix[i][j] = routeFunction.getRouteWeightFunction(cities[i], cities[j]);
-
             }
         }
 
         return matrix;
-
     }
 
-
     private void getCitiesID(City[] cities) {
-
         citiesID = new int[cities.length];
         int i = 0;
         for (City city : cities) {
             citiesID[i] = city.getId();
             i++;
         }
-
     }
 
     public int[] getCitiesID() {
@@ -161,35 +129,11 @@ public class Routes {
 
 
     public void printMatrix() {
-
         for (int i = 0; i < routesMatrix.length; i++) {
             for (int j = 0; j < routesMatrix[i].length; j++) {
                 System.out.print(routesMatrix[i][j] + " ");
             }
             System.out.println();
         }
-
     }
-
-
-    // testing unit
-    public static void main(String[] args) {
-//        Routes routes = new Routes(5, new CoordinatesWeightFunction());
-        City[] cities = new City[5];
-        cities[0] = new City(1, 1, 1);
-        cities[1] = new City(2, 2, 2);
-        cities[2] = new City(4, 3, 3);
-        cities[3] = new City(1, 6, 4);
-        cities[4] = new City(2, 8, 5);
-
-        Routes routes = new Routes(cities, new CoordinatesWeightFunction());
-//        Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());
-        System.out.println(Arrays.toString(routes.getCities()));
-        System.out.println(Arrays.toString(routes.getCitiesID()));
-//        printMatrix(routes.getRoutesMatrix());
-//        printMatrix(routes.routesMatrix);
-        routes.printMatrix();
-
-    }
-
 }

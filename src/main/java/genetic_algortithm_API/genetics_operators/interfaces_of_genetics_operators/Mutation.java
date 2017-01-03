@@ -11,5 +11,4 @@ import genetic_algortithm_API.routes.Routes;
 public interface Mutation {
 
     void mutate(Phenotype individual, Routes routes);
-
 }

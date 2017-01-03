@@ -25,51 +25,31 @@ import java.util.stream.Collectors;
  * Created by User on 25.02.2016.
  */
 public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
-
     private Population currentPopulation;
     private Routes routes;
     private Phenotype result;
-
 
     public CanonicalGeneticAlgorithm(){}
 
     public CanonicalGeneticAlgorithm(int sizeOfPopulation, double mutationProbability,
                                      int maxNumberOfIterations) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
-
         ArrayList<Phenotype> phenotypes = new ArrayList<>();
-
 
         // 1
         routes = new Routes("input.txt", new CoordinatesWeightFunction());
-//        routes.printMatrix();
         // 2
         currentPopulation = new Population(sizeOfPopulation, routes);
 
-//
         for (int i = 0; i < maxNumberOfIterations; i++) {
-
             // 3
             crossover(new TwoPointsCrossing());
-
             // 4
             mutate(new SinglePointMutation(), mutationProbability);
-
             currentPopulation.getPopulation().add(getStrongestPhenotype());
-
-//            checkElementOfPopulation(currentPopulation);
-
             phenotypes.add(getStrongestPhenotype());
         }
 
-
         Collections.sort(phenotypes, (o1, o2) -> (Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes))));
-
-//        System.out.println(currentPopulation);
-        System.out.println(phenotypes.get(0));
-        System.out.println(phenotypes.get(0).getFitnessValue(routes));
-
-//        checkElementOfPopulation(currentPopulation);
-
     }
 
     public CanonicalGeneticAlgorithm(int startCityID, int sizeOfPopulation, double mutationProbability,
@@ -79,25 +59,14 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
         currentPopulation = new Population(sizeOfPopulation, routes);
 
         for (int i = 0; i < maxNumberOfIterations; i++) {
-
-
             crossover(new TwoPointsCrossing());
-
             mutate(new SinglePointMutation(), mutationProbability);
-
             currentPopulation.getPopulation().add(getStrongestPhenotype());
-
-//            checkElementOfPopulation(currentPopulation);
-
             phenotypes.add(getStrongestPhenotype());
         }
 
-
         Collections.sort(phenotypes, (o1, o2) -> (Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes))));
 
-//        System.out.println(currentPopulation);
-        System.out.println(phenotypes.get(0));
-        System.out.println(phenotypes.get(0).getFitnessValue(routes));
         result = phenotypes.get(0);
 
     }
@@ -107,21 +76,13 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
         Phenotype strongestIndividual = getStrongestPhenotype();
         double shortestRoute;
         shortestRoute = strongestIndividual.getFitnessValue(routes);
-//
-//        for (Phenotype phenotype : phenotypes) {
-//            System.out.println(phenotype.getFitnessValue(routes));
-//        }
-
         System.out.println();
         System.out.println("Shortest Route: " + strongestIndividual +
                 " Length: " + shortestRoute);
-
-
     }
 
     private Phenotype getStrongestPhenotype() {
         Phenotype strongestIndividual;
-//        double shortestRoute;
         List<Phenotype> phenotypes = currentPopulation.getPopulation()
                 .stream()
                 .collect(Collectors.toList());
@@ -135,7 +96,6 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
     @Override
     public Phenotype[] select(Selection selection) {
-
         if (currentPopulation.getPopulation().size() < 2) {
             try {
                 throw new SelectionForCrossoverException();
@@ -152,7 +112,6 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
             pairForCrossover[1] = selection.select(currentPopulation, routes);
 
         } while (Arrays.equals(pairForCrossover[0].getPhenotype(), pairForCrossover[1].getPhenotype()));
-
 
         return pairForCrossover;
     }
@@ -181,37 +140,11 @@ public class CanonicalGeneticAlgorithm implements GeneticAlgorithm {
 
     @Override
     public void mutate(Mutation mutation, double mutationProbability) {
-
-
         for (int i = 0; i < currentPopulation.getPopulation().size(); i++) {
-
-//            double randomValue = ;
 
             if (Math.random() < mutationProbability) {
                 mutation.mutate(currentPopulation.getPopulation().get(i), routes);
             }
-
         }
-
-
-//        currentPopulation.getPopulation()
-//                .stream()
-//                .filter(phenotype -> randomValue <= mutationProbability)
-//                .forEach(mutation::mutate);
-
-
     }
-
-    public Phenotype getResult() {
-        return result;
-    }
-
-    public static void main(String[] args) throws Exception {
-
-
-        //  1 - sizeOfPopulation, 2 - mutationProb , 3 - iterations
-
-        new CanonicalGeneticAlgorithm(100, 0.1, 100);
-    }
-
 }

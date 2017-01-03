@@ -14,7 +14,6 @@ public class InvalidGeneException extends Exception {
         super();
     }
 
-
     @Override
     public String getMessage() {
         return message;

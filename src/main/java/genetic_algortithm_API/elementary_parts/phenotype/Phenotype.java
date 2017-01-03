@@ -12,21 +12,15 @@ import java.util.Arrays;
  * @author Zelenin Victor
  */
 public class Phenotype implements Serializable {
-
     private final int[] phenotype;
     private Routes routes;
-
 
     // нормувати єнумом , щоб збільшити точність
     private boolean status;
 
-
     // initialize in different order
     public Phenotype(int[] phenotype) {
         this.phenotype = phenotype;
-        //routes = new Routes("input.txt", new CoordinatesWeightFunction());
-//        validate(phenotype, routes);
-
     }
 
     public Phenotype(int[] phenotype, Routes routes) throws InvalidGeneException {
@@ -37,7 +31,6 @@ public class Phenotype implements Serializable {
     }
 
     private void validate(int[] genes, Routes routes) throws InvalidGeneException {
-
         int[] genesCopy = genes.clone();
 
         if (genes.length != routes.getCitiesID().length) {
@@ -50,10 +43,7 @@ public class Phenotype implements Serializable {
         if (!Arrays.equals(genesCopy, routes.getCitiesID())) {
             throw new InvalidGeneException();
         }
-
-
     }
-
 
     public int[] getPhenotype() {
         return phenotype;
@@ -63,10 +53,8 @@ public class Phenotype implements Serializable {
         return routes;
     }
 
-
     // 1 -> 2 -> 3 -> 1 = value
     public double getFitnessValue(Routes routes) {
-
         double fitnessFunctionValue = 0;
 
         try {
@@ -76,15 +64,11 @@ public class Phenotype implements Serializable {
         }
 
         for (int i = 0; i < phenotype.length; i++) {
-
             int m = phenotype[i] - 1;
             int n = phenotype[(i + 1) % phenotype.length] - 1;
 
-
             fitnessFunctionValue += routes.getRoutesMatrix()[m][n];
-
         }
-
 
         return fitnessFunctionValue;
     }
@@ -92,7 +76,6 @@ public class Phenotype implements Serializable {
     public double getFitnessValue() {
         return getFitnessValue(routes);
     }
-
 
     public void setStatus(boolean status) {
         this.status = status;
@@ -116,7 +99,6 @@ public class Phenotype implements Serializable {
 
         if (status != phenotype1.status) return false;
         return Arrays.equals(phenotype, phenotype1.phenotype);
-
     }
 
     @Override
@@ -125,19 +107,4 @@ public class Phenotype implements Serializable {
         result = 31 * result + (status ? 1 : 0);
         return result;
     }
-
-    // test unit
-    public static void main(String[] args) throws InvalidGeneException {
-
-        int[] genes = {1, 3, 4, 2};
-        Routes routes = new Routes("input.txt", new CoordinatesWeightFunction());
-
-        Phenotype phenotype = new Phenotype(genes);
-
-
-//        Routes.printMatrix(routes.getRoutesMatrix());
-        System.out.println(phenotype.getFitnessValue(routes));
-    }
-
-
 }

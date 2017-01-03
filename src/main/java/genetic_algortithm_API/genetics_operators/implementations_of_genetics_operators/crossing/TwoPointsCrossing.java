@@ -12,12 +12,8 @@ import java.util.*;
  */
 
 public class TwoPointsCrossing implements Crossing {
-
-
     @Override
     public Phenotype crossover(Phenotype mother, Phenotype father) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
-
-
         int phenotypeLength;
 
         if (mother.getPhenotype().length != father.getPhenotype().length) {
@@ -26,12 +22,10 @@ public class TwoPointsCrossing implements Crossing {
             phenotypeLength = father.getPhenotype().length;
         }
 
-
         int[] sonGenes = new int[father.getPhenotype().length];
 
         List<Integer> fatherGenes = new ArrayList<>();
         List<Integer> motherGenes = new ArrayList<>();
-
 
         int firstCrossingIndex;
         int secondCrossingIndex;
@@ -54,72 +48,35 @@ public class TwoPointsCrossing implements Crossing {
         int index = secondCrossingIndex;
         while (fatherGenes.size() != phenotypeLength &&
                 motherGenes.size() != phenotypeLength) {
-
             if (index == phenotypeLength) {
-
                 index = index % phenotypeLength;
-
             }
 
             fatherGenes.add(father.getPhenotype()[index]);
             motherGenes.add(mother.getPhenotype()[index]);
-
             index++;
-
         }
-
 
         for (int i = firstCrossingIndex; i < secondCrossingIndex; i++) {
-
             sonGenes[i] = mother.getPhenotype()[i];
             fatherGenes.remove(fatherGenes.get(fatherGenes.indexOf(mother.getPhenotype()[i])));
-
             motherGenes.remove(motherGenes.get(motherGenes.indexOf(father.getPhenotype()[i])));
-
-
         }
-//        System.out.println(fatherGenes);
-//        System.out.println(motherGenes);
-
         int j = secondCrossingIndex;
         int k = 0;
         while (k != fatherGenes.size()) {
-
             if (j == phenotypeLength) {
                 j = j % phenotypeLength;
-
                 sonGenes[j] = fatherGenes.get(k);
-
                 j++;
                 k++;
             } else {
-
                 sonGenes[j] = fatherGenes.get(k);
-
                 k++;
                 j++;
-
             }
-
         }
 
-
         return new Phenotype(sonGenes);
-    }
-
-
-    // testing unit
-    public static void main(String[] args) throws Exception {
-
-        int[] motherGenes = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-        int[] fatherGenes = {1, 12, 5, 3, 11, 7, 6, 8, 10, 9, 2, 4};
-
-        Phenotype mother = new Phenotype(motherGenes);
-        Phenotype father = new Phenotype(fatherGenes);
-
-        TwoPointsCrossing crossing = new TwoPointsCrossing();
-
-
-
     }
 }

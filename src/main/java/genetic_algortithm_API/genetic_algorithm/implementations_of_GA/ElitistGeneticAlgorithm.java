@@ -17,80 +17,49 @@ import genetic_algortithm_API.routes.routes_weight_func_impl.CoordinatesWeightFu
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by User on 28.02.2016.
  */
 public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
-
     private Population currentPopulation;
     private Routes routes;
     private Phenotype result;
 
-
     public ElitistGeneticAlgorithm(int sizeOfPopulation, double mutationProbability,
                                    int maxNumberOfIterations, City[] cities,
                                    Crossing crossing, Mutation mutation) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
-
         routes = new Routes(cities, new CoordinatesWeightFunction());
-
-
         currentPopulation = new Population(sizeOfPopulation, routes);
-
-
         ArrayList<Phenotype> results = new ArrayList<>();
 
         for (int i = 0; i < maxNumberOfIterations; i++) {
-
-
             checkElementOfPopulation();
-
             createNewGeneration(crossing);
-
             mutate(mutation, mutationProbability);
-
-            System.out.println(currentPopulation.getPopulation().get(0).getFitnessValue(routes));
             results.add(currentPopulation.getPopulation().get(0));
-
-
         }
 
         results.forEach(o -> System.out.print(o.getFitnessValue(routes) + " "));
         System.out.println();
         Collections.sort(results, (o1, o2) -> (Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes))));
-        System.out.println("size " + results.size());
-        System.out.println("iterations " + maxNumberOfIterations);
         results.forEach(o -> System.out.print(o.getFitnessValue(routes) + " "));
         result = results.get(0);
-        System.out.println("RESULT: " + result.getFitnessValue(routes));
-
     }
 
 
     public ElitistGeneticAlgorithm(int sizeOfPopulation, double mutationProbability,
                                    int maxNumberOfIterations, City[] cities) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
-
         routes = new Routes(cities, new CoordinatesWeightFunction());
-
-
         currentPopulation = new Population(sizeOfPopulation, routes);
-
-
         ArrayList<Phenotype> results = new ArrayList<>();
 
         for (int i = 0; i < maxNumberOfIterations; i++) {
-
-
             checkElementOfPopulation();
-
             createNewGeneration(new TwoPointsCrossing());
-
             mutate(new SinglePointMutation(), mutationProbability);
-
-            System.out.println(currentPopulation.getPopulation().get(0).getFitnessValue(routes));
             results.add(currentPopulation.getPopulation().get(0));
-
-
         }
 
         results.forEach(o -> System.out.print(o.getFitnessValue(routes) + " "));
@@ -107,41 +76,16 @@ public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
 
     public ElitistGeneticAlgorithm(int sizeOfPopulation, double mutationProbability,
                                    int maxNumberOfIterations) throws InvalidGeneException, IllegalLengthOfPhenotypeException {
-
         routes = new Routes(20, new CoordinatesWeightFunction());
-
         currentPopulation = new Population(sizeOfPopulation, routes);
-
-
         ArrayList<Phenotype> results = new ArrayList<>(8);
 
         for (int i = 0; i < maxNumberOfIterations; i++) {
-
-
             checkElementOfPopulation();
-
             createNewGeneration(new TwoPointsCrossing());
-
             mutate(new GreedyMutation(), mutationProbability);
-
-//            result = currentPopulation.getPopulation().get(0);
             results.add(currentPopulation.getPopulation().get(0));
             System.out.println(result.getFitnessValue(routes));
-
-//            if (i > 5 * routes.getCities().length && checkResults(results)) {
-//                break;
-//            }
-
-
-//            crossover(new TwoPointsCrossing());
-
-//            mutate(new SinglePointMutation(), mutationProbability);
-//
-//            currentPopulation.getPopulation().add(getStrongestPhenotype());
-
-//            checkElementOfPopulation(currentPopulation);
-
-//            phenotypes.add(getStrongestPhenotype());
         }
 
         Collections.sort(results, (o1, o2) -> (Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes))));
@@ -159,11 +103,8 @@ public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
 
     @Override
     public void checkElementOfPopulation() {
-
         Collections.sort(currentPopulation.getPopulation(),
-                (o1, o2) -> Double.compare(o1.getFitnessValue(routes), o2.getFitnessValue(routes)));
-//        System.out.println(currentPopulation.getPopulation().get(0));
-//        System.out.println(currentPopulation.getPopulation().get(0).getFitnessValue(routes));
+                Comparator.comparingDouble(o -> o.getFitnessValue(routes)));
     }
 
     @Override
@@ -172,18 +113,11 @@ public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
     }
 
     public void createNewGeneration(Crossing crossing) throws IllegalLengthOfPhenotypeException, InvalidGeneException {
-
-
         int j = 0;
         for (int i = currentPopulation.getPopulation().size() / 4; i < currentPopulation.getPopulation().size(); i++) {
             currentPopulation.getPopulation().set(i, crossing.crossover(currentPopulation.getPopulation().get(j),
                     currentPopulation.getPopulation().get(j + 1)));
-
-
         }
-
-
-//        currentPopulation.setPopulation(newGeneration);
     }
 
     @Override
@@ -194,19 +128,9 @@ public class ElitistGeneticAlgorithm implements GeneticAlgorithm {
     @Override
     public void mutate(Mutation mutation, double probability) {
         for (int i = 0; i < currentPopulation.getPopulation().size(); i++) {
-
-//            double randomValue = ;
-
             if (Math.random() < probability) {
                 mutation.mutate(currentPopulation.getPopulation().get(i), routes);
             }
-
         }
-
-    }
-
-    // testing unit
-    public static void main(String[] args) throws InvalidGeneException, IllegalLengthOfPhenotypeException {
-        new ElitistGeneticAlgorithm(100, 0.1, 1000);
     }
 }
